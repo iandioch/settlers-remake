@@ -39,7 +39,7 @@ import java.util.BitSet;
  */
 public class OriginalMapFileContent implements IMapData {
 
-	//heigh of original maps are 0..225 and of remake 0..127
+	//- Heigh of original maps are 0..225 and of remake 0..127
 	private final static float ORIGINAL_TO_REMAKE_HEIGHT_FACTOR = 127f / 225f;
 	private final static float ORIGINAL_TO_REMAKE_RESOURCE_AMOUNT_FACTOR = 127f / 15f;
 
@@ -77,7 +77,6 @@ public class OriginalMapFileContent implements IMapData {
 	private byte [] height = null;
 	private ELandscapeType[] landscapeType = null;
 	private MapObject [] mapObject = null ;
-	//private byte [] plyerClaim = null ;
 	private byte [] accessible = null ;
 	private EResourceType [] resources = null;
 	private byte [] resourceAmount = null;
@@ -98,7 +97,6 @@ public class OriginalMapFileContent implements IMapData {
 		height = new byte[dataCount];
 		landscapeType = new ELandscapeType[dataCount];
 		mapObject = new MapObject[dataCount];
-		//plyerClaim = new byte[dataCount];
 		accessible = new byte[dataCount];
 		resources = new EResourceType[dataCount];
 		resourceAmount = new byte[dataCount];
@@ -122,40 +120,11 @@ public class OriginalMapFileContent implements IMapData {
 
 		OriginalMapFileDataStructs.EOriginalLandscapeType originalType = OriginalMapFileDataStructs.EOriginalLandscapeType.getTypeByInt(type);
 
-		//TODO: remove me when Original Maps are finished ---- begin
-		/*if (!types.contains(originalType)) {
-			types.add(originalType);
-			System.out.print("#" + originalType + "(" + (pos % widthHeight) + "|" + (pos / widthHeight) + ")");
-			if (originalType == OriginalMapFileDataStructs.EOriginalLandscapeType.NOT_A_TYPE) {
-				System.out.println(" (not a type: " + type + ")");
-			}
-			if (originalType.value != null) {
-				System.out.println(" (" + originalType.value + ")");
-			} else System.out.println();
-		}*/
-		//TODO: remove me when Original Maps are finished ---- end
 		landscapeType[pos] = originalType.value;
 	}
 	
-	
-	//private List<OriginalMapFileDataStructs.EObjectType> mapObjects = new Vector<OriginalMapFileDataStructs.EObjectType>();
-
 	public void setMapObject(int pos, int type) {
 		if ((pos<0) || (pos> dataCount)) return;
-
-		//OriginalMapFileDataStructs.EObjectType originalType = OriginalMapFileDataStructs.EObjectType.getTypeByInt(type);
-		//TODO: remove me when Original Maps are finished ---- begin
-		/*if (!mapObjects.contains(originalType)) {
-			mapObjects.add(originalType);
-			System.out.print("#" + originalType + "(" + (pos % widthHeight) + "|" + (pos / widthHeight) + ")");
-			if (originalType == OriginalMapFileDataStructs.EObjectType.NO_OBJECT) {
-				System.out.println(" (not a type: " + type + ")");
-			}
-			if (originalType.value != null) {
-				System.out.println(" (" + originalType.value + ")");
-			} else System.out.println();
-		}*/
-		//TODO: remove me when Original Maps are finished ---- end
 
 		mapObject[pos] = OriginalMapFileDataStructs.EObjectType.getTypeByInt(type).getNewInstance();
 	}
