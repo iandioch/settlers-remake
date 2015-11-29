@@ -21,7 +21,7 @@ import jsettlers.common.map.object.BuildingObject;
 import jsettlers.common.map.object.MapObject;
 import jsettlers.common.position.RelativePoint;
 import jsettlers.logic.map.original.OriginalMapFileDataStructs.EMapFileVersion;
-import jsettlers.logic.map.original.OriginalMapFileDataStructs.EMapStartResources;
+import jsettlers.logic.map.EMapStartResources;
 import jsettlers.common.position.ShortPoint2D;
 
 import java.util.Arrays;
@@ -33,8 +33,7 @@ import java.util.List;
 /**
  * @author Thomas Zeugner
  */
-public class OriginalMapFileContentReader
-{
+public class OriginalMapFileContentReader {
 	//--------------------------------------------------//
 	public static class MapResourceInfo {
 		OriginalMapFileDataStructs.EMapFilePartType PartType;
@@ -54,7 +53,7 @@ public class OriginalMapFileContentReader
 
 	private byte[] mapContent;
 	private int fileVersion = 0;
-	private OriginalMapFileDataStructs.EMapStartResources startResources = EMapStartResources.HIGH_GOODS;
+	private EMapStartResources startResources;
 	private InputStream MapFileStream;
 
 	private String mapQuestTip = null;
@@ -78,7 +77,7 @@ public class OriginalMapFileContentReader
 
 
 	//- reads the whole stream and returns it as BYTE-Array
-	public static byte[] getBytesFromInputStream(InputStream is) throws IOException{
+	public static byte[] getBytesFromInputStream(InputStream is) throws IOException {
 		
 		//- read file to buffer
 		try (ByteArrayOutputStream os = new ByteArrayOutputStream();) {
@@ -90,8 +89,7 @@ public class OriginalMapFileContentReader
 	        os.flush();
 	
 	        return os.toByteArray();
-	    }
-	    catch (Exception e) {
+	    } catch (Exception e) {
 	    	return new byte[0];
 	    }
 	}
@@ -388,7 +386,7 @@ public class OriginalMapFileContentReader
 		//- read start resources
 		int StartResourcesValue = readBEIntFrom(pos);
 		pos += 4;
-		
+
 		this.startResources = EMapStartResources.FromMapValue(StartResourcesValue);
 	}
 
@@ -640,9 +638,11 @@ public class OriginalMapFileContentReader
 	}
 
 
-	public void addStartTowerMaterialsAndSettlers() {
+	public void addStartTowerMaterialsAndSettlers(EMapStartResources mapStartResources) {
 		//- only if there are no buildings
 		if (hasBuildings) return;
+
+		EMapStartResources targetMapStartResources = mapStartResources != null ? mapStartResources : startResources;
 		
 		int playerCount = mapData.getPlayerCount();
 		
@@ -653,8 +653,8 @@ public class OriginalMapFileContentReader
 			mapData.setMapObject(startPoint.x, startPoint.y, new BuildingObject(EBuildingType.TOWER, (byte)playerId));
 			
 			//- list of all objects that have to be added for this player
-			List<MapObject> mapObjects = EMapStartResources.generateStackObjects(startResources);
-			mapObjects.addAll(EMapStartResources.generateMovableObjects(startResources, playerId));
+			List<MapObject> mapObjects = EMapStartResources.generateStackObjects(targetMapStartResources);
+			mapObjects.addAll(EMapStartResources.generateMovableObjects(targetMapStartResources, playerId));
 
 			//- blocking area of the tower
 			List<RelativePoint> towerTiles = Arrays.asList(EBuildingType.TOWER.getProtectedTiles());

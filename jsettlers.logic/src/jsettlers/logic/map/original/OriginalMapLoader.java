@@ -21,6 +21,7 @@ import jsettlers.common.map.MapLoadException;
 import jsettlers.graphics.map.UIState;
 import jsettlers.graphics.startscreen.interfaces.ILoadableMapPlayer;
 import jsettlers.input.PlayerState;
+import jsettlers.logic.map.EMapStartResources;
 import jsettlers.logic.map.save.IListedMap;
 import jsettlers.logic.map.save.MapFileHeader;
 import jsettlers.logic.map.MapLoader;
@@ -135,14 +136,13 @@ public class OriginalMapLoader extends MapLoader
 	//----------------------------//
 	
 	@Override
-	public MainGridWithUiSettings loadMainGrid(PlayerSetting[] playerSettings) throws MapLoadException {
+	public MainGridWithUiSettings loadMainGrid(PlayerSetting[] playerSettings, EMapStartResources mapStartResources) throws MapLoadException {
 		MilliStopWatch watch = new MilliStopWatch();
 		
 		try {
 			//- the map buffer of the class may is closed and need to reopen! 
 			mapContent.reOpen(this.listedMap.getInputStream());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.err.println("Error: "+ e.getMessage());
 		}
 		
@@ -159,7 +159,7 @@ public class OriginalMapLoader extends MapLoader
 		//- read the buildings
 		mapContent.readBuildings();
 		//- add player resources
-		mapContent.addStartTowerMaterialsAndSettlers();
+		mapContent.addStartTowerMaterialsAndSettlers(mapStartResources);
 		
 		OriginalMapFileContent MapData = mapContent.mapData;
 		MapData.calculateBlockedPartitions();
@@ -213,7 +213,7 @@ public class OriginalMapLoader extends MapLoader
 		//- read the buildings
 		mapContent.readBuildings();
 		//- add player resources
-		mapContent.addStartTowerMaterialsAndSettlers();
+		mapContent.addStartTowerMaterialsAndSettlers(null);
 		
 		OriginalMapFileContent MapData = mapContent.mapData;
 		MapData.calculateBlockedPartitions();

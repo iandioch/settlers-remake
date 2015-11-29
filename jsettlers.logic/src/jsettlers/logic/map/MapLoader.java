@@ -50,8 +50,7 @@ public abstract class MapLoader implements IGameCreator, Comparable<MapLoader>, 
 			|| (checkExtention(listedMap.getFileName(), MapLoader.MAP_EXTENSION_ORIGINAL_MAP_EDITOR) ))	{
 			//- original Siedler 3 Map
 			return new OriginalMapLoader(listedMap);
-		}
-		else {
+		} else {
 			//- Siedler 3 Remake Savegame or Map
 			MapFileHeader header = RemakeMapLoader.loadHeader(listedMap);
 	
@@ -67,8 +66,7 @@ public abstract class MapLoader implements IGameCreator, Comparable<MapLoader>, 
 
 	}
 	
-	public static boolean checkExtention(String filename, String Extention)
-	{
+	public static boolean checkExtention(String filename, String Extention) {
 		if (filename == null) return false;
 		return filename.toLowerCase().endsWith(Extention.toLowerCase());
 	}

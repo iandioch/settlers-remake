@@ -27,6 +27,7 @@ import java.util.Date;
 
 import jsettlers.ai.highlevel.AiExecutor;
 import jsettlers.common.CommonConstants;
+import jsettlers.common.ai.EWhatToDoAiType;
 import jsettlers.common.map.IGraphicsGrid;
 import jsettlers.common.map.MapLoadException;
 import jsettlers.common.player.IInGamePlayer;
@@ -45,6 +46,7 @@ import jsettlers.input.IGameStoppable;
 import jsettlers.input.PlayerState;
 import jsettlers.logic.buildings.Building;
 import jsettlers.logic.constants.MatchConstants;
+import jsettlers.logic.map.EMapStartResources;
 import jsettlers.logic.map.grid.MainGrid;
 import jsettlers.logic.map.grid.partition.PartitionsGrid;
 import jsettlers.logic.map.save.IGameCreator;
@@ -200,7 +202,7 @@ public class JSettlersGame {
 				updateProgressListener(EProgressState.LOADING_MAP, 0.3f);
 				Thread imagePreloader = ImageProvider.getInstance().startPreloading();
 
-				MainGridWithUiSettings gridWithUiState = mapCreator.loadMainGrid(playerSettings);
+				MainGridWithUiSettings gridWithUiState = mapCreator.loadMainGrid(playerSettings, EMapStartResources.HIGH_GOODS);
 				mainGrid = gridWithUiState.getMainGrid();
 				PlayerState playerState = gridWithUiState.getPlayerState(playerId);
 

@@ -20,6 +20,7 @@ import java.io.ObjectInputStream;
 import jsettlers.common.map.IMapData;
 import jsettlers.common.map.MapLoadException;
 import jsettlers.input.PlayerState;
+import jsettlers.logic.map.EMapStartResources;
 import jsettlers.logic.map.grid.GameSerializer;
 import jsettlers.logic.map.grid.MainGrid;
 import jsettlers.logic.map.save.IListedMap;
@@ -39,7 +40,7 @@ public class SavegameLoader extends RemakeMapLoader {
 	}
 
 	@Override
-	public MainGridWithUiSettings loadMainGrid(PlayerSetting[] playerSettings) throws MapLoadException {
+	public MainGridWithUiSettings loadMainGrid(PlayerSetting[] playerSettings, EMapStartResources mapStartResources) throws MapLoadException {
 		try (ObjectInputStream ois = new ObjectInputStream(super.getMapDataStream())) {
 			PlayerState[] playerStates = (PlayerState[]) ois.readObject();
 			GameSerializer gameSerializer = new GameSerializer();
