@@ -23,6 +23,7 @@ import jsettlers.common.position.RelativePoint;
 import jsettlers.logic.map.original.OriginalMapFileDataStructs.EMapFileVersion;
 import jsettlers.logic.map.EMapStartResources;
 import jsettlers.common.position.ShortPoint2D;
+import jsettlers.logic.player.PlayerSetting;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -638,7 +639,7 @@ public class OriginalMapFileContentReader {
 	}
 
 
-	public void addStartTowerMaterialsAndSettlers(EMapStartResources mapStartResources) {
+	public void addStartTowerMaterialsAndSettlers(EMapStartResources mapStartResources, PlayerSetting[] playerSettings) {
 		//- only if there are no buildings
 		if (hasBuildings) return;
 
@@ -646,41 +647,44 @@ public class OriginalMapFileContentReader {
 		
 		int playerCount = mapData.getPlayerCount();
 		
-		for (byte playerId = 0; playerId < playerCount; playerId++) {
-			ShortPoint2D startPoint = mapData.getStartPoint(playerId);
-			
-			//- add the start Tower for this player
-			mapData.setMapObject(startPoint.x, startPoint.y, new BuildingObject(EBuildingType.TOWER, (byte)playerId));
-			
-			//- list of all objects that have to be added for this player
-			List<MapObject> mapObjects = EMapStartResources.generateStackObjects(targetMapStartResources);
-			mapObjects.addAll(EMapStartResources.generateMovableObjects(targetMapStartResources, playerId));
+		for (byte playerId = 0; playerId < playerSettings.length; playerId++) {
+			if (playerSettings[playerId].isAvailable()) {
+				ShortPoint2D startPoint = mapData.getStartPoint(playerId);
 
-			//- blocking area of the tower
-			List<RelativePoint> towerTiles = Arrays.asList(EBuildingType.TOWER.getProtectedTiles());
+				//- add the start Tower for this player
+				mapData.setMapObject(startPoint.x, startPoint.y, new BuildingObject(EBuildingType.TOWER, (byte) playerId));
 
-			RelativePoint relativeMapObjectPoint = new RelativePoint(-3, 3);
-			
-			for (MapObject currentMapObject : mapObjects) {
-				do {
-					//- get next point
-					relativeMapObjectPoint = nextPointOnSpiral(relativeMapObjectPoint);
-					
-					//- don't put things under the tower
-					if (towerTiles.contains(relativeMapObjectPoint)) continue;
-					
-					//- get absolute position
-					int x = relativeMapObjectPoint.calculateX(startPoint.x);
-					int y = relativeMapObjectPoint.calculateY(startPoint.y);
-					
-					//- is this place free?
-					if (mapData.getMapObject(x, y) == null) {
-						//- add Object
-						mapData.setMapObject(x, y, currentMapObject);
-						//- break DO: next object...
-						break;
-					}
-				} while (true);
+				//- list of all objects that have to be added for this player
+				List<MapObject> mapObjects = EMapStartResources.generateStackObjects(targetMapStartResources);
+				mapObjects.addAll(EMapStartResources.generateMovableObjects(targetMapStartResources, playerId));
+
+				//- blocking area of the tower
+				List<RelativePoint> towerTiles = Arrays.asList(EBuildingType.TOWER.getProtectedTiles());
+
+				RelativePoint relativeMapObjectPoint = new RelativePoint(-3, 3);
+
+				for (MapObject currentMapObject : mapObjects) {
+					do {
+						//- get next point
+						relativeMapObjectPoint = nextPointOnSpiral(relativeMapObjectPoint);
+
+						//- don't put things under the tower
+						if (towerTiles.contains(relativeMapObjectPoint))
+							continue;
+
+						//- get absolute position
+						int x = relativeMapObjectPoint.calculateX(startPoint.x);
+						int y = relativeMapObjectPoint.calculateY(startPoint.y);
+
+						//- is this place free?
+						if (mapData.getMapObject(x, y) == null) {
+							//- add Object
+							mapData.setMapObject(x, y, currentMapObject);
+							//- break DO: next object...
+							break;
+						}
+					} while (true);
+				}
 			}
 		}
 	}

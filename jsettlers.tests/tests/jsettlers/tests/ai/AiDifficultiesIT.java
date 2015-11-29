@@ -52,18 +52,18 @@ public class AiDifficultiesIT {
 
 	@Test
 	public void easyShouldConquerVeryEasy() throws IOException, MapLoadException {
-		holdBattleBetween(EWhatToDoAiType.ROMAN_EASY, EWhatToDoAiType.ROMAN_VERY_EASY, 100 * MINUTES);
+		holdBattleBetween(EWhatToDoAiType.ROMAN_EASY, EWhatToDoAiType.ROMAN_VERY_EASY, 120 * MINUTES);
 	}
 
 	@Test
-	@Ignore("unignore when orphan start resources and spreading land not wide enough to montain bugs are fixed")
 	public void hardShouldConquerEasy() throws IOException, MapLoadException {
-		holdBattleBetween(EWhatToDoAiType.ROMAN_HARD, EWhatToDoAiType.ROMAN_EASY, 300 * MINUTES);
+		holdBattleBetween(EWhatToDoAiType.ROMAN_HARD, EWhatToDoAiType.ROMAN_EASY, 170 * MINUTES);
 	}
 
-	@Test
+	@Test //TODO
+	@Ignore("unignore when spreading land not wide enough to mountain bug is fixed")
 	public void veryHardShouldConquerHard() throws IOException, MapLoadException {
-		holdBattleBetween(EWhatToDoAiType.ROMAN_VERY_HARD, EWhatToDoAiType.ROMAN_HARD, 100 * MINUTES);
+		holdBattleBetween(EWhatToDoAiType.ROMAN_VERY_HARD, EWhatToDoAiType.ROMAN_HARD, 300 * MINUTES);
 	}
 
 	@Test

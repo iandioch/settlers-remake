@@ -159,7 +159,7 @@ public class OriginalMapLoader extends MapLoader
 		//- read the buildings
 		mapContent.readBuildings();
 		//- add player resources
-		mapContent.addStartTowerMaterialsAndSettlers(mapStartResources);
+		mapContent.addStartTowerMaterialsAndSettlers(mapStartResources, playerSettings);
 		
 		OriginalMapFileContent MapData = mapContent.mapData;
 		MapData.calculateBlockedPartitions();
@@ -212,9 +212,7 @@ public class OriginalMapLoader extends MapLoader
 		mapContent.readSettlers();
 		//- read the buildings
 		mapContent.readBuildings();
-		//- add player resources
-		mapContent.addStartTowerMaterialsAndSettlers(null);
-		
+
 		OriginalMapFileContent MapData = mapContent.mapData;
 		MapData.calculateBlockedPartitions();
 
