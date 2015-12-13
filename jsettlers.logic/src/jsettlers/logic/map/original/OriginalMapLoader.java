@@ -158,7 +158,7 @@ public class OriginalMapLoader extends MapLoader {
 		// - read the buildings
 		mapContent.readBuildings();
 		// - add player resources
-		mapContent.addStartTowerMaterialsAndSettlers();
+		mapContent.addStartTowerMaterialsAndSettlers(mapStartResources, playerSettings);
 
 		OriginalMapFileContent mapData = mapContent.mapData;
 		mapData.calculateBlockedPartitions();
@@ -188,7 +188,6 @@ public class OriginalMapLoader extends MapLoader {
 
 	@Override
 	public IMapData getMapData() throws MapLoadException {
-
 		try {
 			// - the map buffer of the class may is closed and need to reopen!
 			mapContent.reOpen(this.listedMap.getInputStream());
@@ -208,14 +207,10 @@ public class OriginalMapLoader extends MapLoader {
 		mapContent.readSettlers();
 		// - read the buildings
 		mapContent.readBuildings();
-		// - add player resources
-		mapContent.addStartTowerMaterialsAndSettlers();
 
 		OriginalMapFileContent mapData = mapContent.mapData;
 		mapData.calculateBlockedPartitions();
 
 		return mapData;
-
 	}
-
 }

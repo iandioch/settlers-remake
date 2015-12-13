@@ -27,7 +27,6 @@ import java.util.Date;
 
 import jsettlers.ai.highlevel.AiExecutor;
 import jsettlers.common.CommonConstants;
-import jsettlers.common.ai.EWhatToDoAiType;
 import jsettlers.common.map.IGraphicsGrid;
 import jsettlers.common.map.MapLoadException;
 import jsettlers.common.player.IInGamePlayer;

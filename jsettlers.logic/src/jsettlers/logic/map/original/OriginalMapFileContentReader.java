@@ -26,17 +26,9 @@ import jsettlers.common.map.object.BuildingObject;
 import jsettlers.common.map.object.MapObject;
 import jsettlers.common.position.RelativePoint;
 import jsettlers.common.position.ShortPoint2D;
-import jsettlers.logic.map.original.OriginalMapFileDataStructs.EMapFileVersion;
-import jsettlers.logic.map.original.OriginalMapFileDataStructs.EMapStartResources;
 import jsettlers.logic.map.EMapStartResources;
-import jsettlers.common.position.ShortPoint2D;
+import jsettlers.logic.map.original.OriginalMapFileDataStructs.EMapFileVersion;
 import jsettlers.logic.player.PlayerSetting;
-
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 
 /**
  * @author Thomas Zeugner
@@ -60,9 +52,7 @@ public class OriginalMapFileContentReader {
 	private boolean hasBuildings = false;
 
 	private byte[] mapContent;
-	private int fileVersion = 0;
-	private OriginalMapFileDataStructs.EMapStartResources startResources = EMapStartResources.HIGH_GOODS;
-	private InputStream MapFileStream;
+	private EMapStartResources startResources = EMapStartResources.HIGH_GOODS;
 
 	private String mapQuestTip = null;
 	private String mapQuestText = null;
@@ -638,49 +628,52 @@ public class OriginalMapFileContentReader {
 		return true;
 	}
 
-	public void addStartTowerMaterialsAndSettlers() {
+	public void addStartTowerMaterialsAndSettlers(EMapStartResources mapStartResources, PlayerSetting[] playerSettings) {
 		// - only if there are no buildings
 		if (hasBuildings)
 			return;
+		EMapStartResources targetMapStartResources = mapStartResources != null ? mapStartResources : startResources;
 
 		int playerCount = mapData.getPlayerCount();
 
 		for (byte playerId = 0; playerId < playerCount; playerId++) {
-			ShortPoint2D startPoint = mapData.getStartPoint(playerId);
+			if (playerSettings[playerId].isAvailable()) {
+				ShortPoint2D startPoint = mapData.getStartPoint(playerId);
 
-			// - add the start Tower for this player
-			mapData.setMapObject(startPoint.x, startPoint.y, new BuildingObject(EBuildingType.TOWER, playerId));
+				// - add the start Tower for this player
+				mapData.setMapObject(startPoint.x, startPoint.y, new BuildingObject(EBuildingType.TOWER, playerId));
 
-			// - list of all objects that have to be added for this player
-			List<MapObject> mapObjects = EMapStartResources.generateStackObjects(startResources);
-			mapObjects.addAll(EMapStartResources.generateMovableObjects(startResources, playerId));
+				// - list of all objects that have to be added for this player
+				List<MapObject> mapObjects = EMapStartResources.generateStackObjects(targetMapStartResources);
+				mapObjects.addAll(EMapStartResources.generateMovableObjects(targetMapStartResources, playerId));
 
-			// - blocking area of the tower
-			List<RelativePoint> towerTiles = Arrays.asList(EBuildingType.TOWER.getProtectedTiles());
+				// - blocking area of the tower
+				List<RelativePoint> towerTiles = Arrays.asList(EBuildingType.TOWER.getProtectedTiles());
 
-			RelativePoint relativeMapObjectPoint = new RelativePoint(-3, 3);
+				RelativePoint relativeMapObjectPoint = new RelativePoint(-3, 3);
 
-			for (MapObject currentMapObject : mapObjects) {
-				do {
-					// - get next point
-					relativeMapObjectPoint = nextPointOnSpiral(relativeMapObjectPoint);
+				for (MapObject currentMapObject : mapObjects) {
+					do {
+						// - get next point
+						relativeMapObjectPoint = nextPointOnSpiral(relativeMapObjectPoint);
 
-					// - don't put things under the tower
-					if (towerTiles.contains(relativeMapObjectPoint))
-						continue;
+						// - don't put things under the tower
+						if (towerTiles.contains(relativeMapObjectPoint))
+							continue;
 
-					// - get absolute position
-					int x = relativeMapObjectPoint.calculateX(startPoint.x);
-					int y = relativeMapObjectPoint.calculateY(startPoint.y);
+						// - get absolute position
+						int x = relativeMapObjectPoint.calculateX(startPoint.x);
+						int y = relativeMapObjectPoint.calculateY(startPoint.y);
 
-					// - is this place free?
-					if (mapData.getMapObject(x, y) == null) {
-						// - add Object
-						mapData.setMapObject(x, y, currentMapObject);
-						// - break DO: next object...
-						break;
-					}
-				} while (true);
+						// - is this place free?
+						if (mapData.getMapObject(x, y) == null) {
+							// - add Object
+							mapData.setMapObject(x, y, currentMapObject);
+							// - break DO: next object...
+							break;
+						}
+					} while (true);
+				}
 			}
 		}
 	}
