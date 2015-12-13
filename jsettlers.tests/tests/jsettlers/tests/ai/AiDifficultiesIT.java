@@ -17,7 +17,6 @@ package jsettlers.tests.ai;
 import static org.junit.Assert.fail;
 
 import jsettlers.common.logging.StatisticsStopWatch;
-import jsettlers.common.map.MapLoadException;
 import jsettlers.logic.map.MapLoader;
 import jsettlers.logic.map.save.DirectoryMapLister;
 import org.junit.Ignore;
@@ -34,9 +33,6 @@ import jsettlers.logic.player.PlayerSetting;
 import jsettlers.main.JSettlersGame;
 import jsettlers.main.replay.ReplayTool;
 import jsettlers.network.client.OfflineNetworkConnector;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * @author codingberlin
@@ -147,7 +143,7 @@ public class AiDifficultiesIT {
 
 	private JSettlersGame.GameRunner createStartingGame(PlayerSetting[] playerSettings) throws MapLoadException, IOException {
 		MapLoader mapCreator = MapLoader.getLoaderForListedMap(new DirectoryMapLister.ListedMapFile(new File("./resources/map/SpezialSumpf_12.map")));
-		JSettlersGame game = new JSettlersGame(mapCreator, 2l, new OfflineNetworkConnector(), (byte) 0, playerSettings);
+		JSettlersGame game = new JSettlersGame(mapCreator, 2L, new OfflineNetworkConnector(), (byte) 0, playerSettings);
 		return (JSettlersGame.GameRunner) game.start();
 	}
 

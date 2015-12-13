@@ -46,15 +46,14 @@ import jsettlers.logic.player.PlayerSetting;
  * @author Andreas Eberle
  */
 public abstract class RemakeMapLoader extends MapLoader {
-	
+
 	private IListedMap file;
-	
+
 	public RemakeMapLoader(IListedMap file, MapFileHeader header) {
 		this.file = file;
 		this.header = header;
 	}
 
-	
 	public MapFileHeader getFileHeader() {
 		return header;
 	}
@@ -111,7 +110,6 @@ public abstract class RemakeMapLoader extends MapLoader {
 		return header.getCreationDate();
 	}
 
-
 	@Override
 	public String toString() {
 		return "MapLoader: mapName: " + file.getFileName() + " mapId: " + getMapId();
@@ -136,7 +134,6 @@ public abstract class RemakeMapLoader extends MapLoader {
 	public List<ILoadableMapPlayer> getPlayers() { // TODO @Andreas Eberle: supply saved players information.
 		return new ArrayList<ILoadableMapPlayer>();
 	}
-
 
 	@Override
 	public MainGridWithUiSettings loadMainGrid(PlayerSetting[] playerSettings, EMapStartResources mapStartResources) throws MapLoadException {
