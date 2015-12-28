@@ -16,12 +16,10 @@ package jsettlers.main.swing;
 
 import java.awt.Dimension;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -31,6 +29,11 @@ import javax.swing.filechooser.FileFilter;
 import go.graphics.area.Area;
 import go.graphics.swing.AreaContainer;
 import go.graphics.swing.sound.SwingSoundPlayer;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import jsettlers.common.CommitInfo;
 import jsettlers.common.CommonConstants;
 import jsettlers.common.map.MapLoadException;
@@ -57,7 +60,7 @@ import jsettlers.network.client.OfflineNetworkConnector;
  * @author Andreas Eberle
  * @author michael
  */
-public class SwingManagedJSettlers {
+public class SwingManagedJSettlers extends Application {
 	static {
 		CommonConstants.USE_SAVEGAME_COMPRESSION = true;
 	}
@@ -77,6 +80,7 @@ public class SwingManagedJSettlers {
 
 		JSettlersScreen content = startGui();
 		generateContent(argsMap, content);
+		launch(args);
 	}
 
 	/**
@@ -286,5 +290,16 @@ public class SwingManagedJSettlers {
 
 	private static String getBuild() {
 		return Labels.getString("version-build", CommitInfo.COMMIT_HASH_SHORT);
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+			FXMLLoader fxmlLoader = new FXMLLoader();
+			fxmlLoader.setResources(new PropertyResourceBundle(Labels.getMostDominantLocaleStream()));
+			Parent root = fxmlLoader.load(new FileInputStream(new File("src/jsettlers/main/javafx/mainMenu.fxml")));
+			Scene scene = new Scene(root, 500, 500);
+			primaryStage.setScene(scene);
+			primaryStage.show();
+
 	}
 }

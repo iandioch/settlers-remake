@@ -1,0 +1,15 @@
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+
+<BorderPane fx:controller="jsettlers.main.javafx.MainMenuController" xmlns:fx="http://javafx.com/fxml">
+    <center>
+        <GridPane>
+            <Button text="%start-newgame" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <Button text="%start-loadgame" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <Button text="%start-newmultiplayer" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <Button text="%start-joinmultiplayer" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <Button text="%settings-title" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        </GridPane>
+    </center>
+</BorderPane>

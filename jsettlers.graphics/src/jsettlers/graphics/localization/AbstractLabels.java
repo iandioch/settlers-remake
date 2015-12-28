@@ -68,6 +68,7 @@ public abstract class AbstractLabels {
 	 * The most dominant locale that was used.
 	 */
 	protected Locale usedLocale;
+	protected LocaleSuffix usedLocaleSuffix;
 
 	private synchronized Properties getLabels() {
 		if (!labelsLoaded) {
@@ -80,16 +81,17 @@ public abstract class AbstractLabels {
 	private void loadLabels() {
 		LocaleSuffix[] locales = getLocaleSuffixes();
 
-		for (LocaleSuffix locale : locales) {
+		for (LocaleSuffix localeSuffix : locales) {
 			try {
 				Properties currentLocaleLabels = new Properties(labels);
-				InputStream inputStream = getLocaleStream(locale);
+				InputStream inputStream = getLocaleStream(localeSuffix);
 				currentLocaleLabels.load(new InputStreamReader(inputStream, "UTF-8"));
 				labels = currentLocaleLabels;
 				// Store the most dominant locale found.
-				usedLocale = locale.getLocale();
+				usedLocale = localeSuffix.getLocale();
+				usedLocaleSuffix = localeSuffix;
 			} catch (IOException e) {
-				System.err.println("Warning: Could not load " + locale + ". Falling back to next file.");
+				System.err.println("Warning: Could not load " + localeSuffix + ". Falling back to next file.");
 			}
 		}
 	}

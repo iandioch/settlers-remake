@@ -44,6 +44,10 @@ public final class Labels extends AbstractLabels {
 		return inputStream;
 	}
 
+	public static InputStream getMostDominantLocaleStream() throws IOException {
+		return instance.getLocaleStream(instance.usedLocaleSuffix);
+	}
+
 	/**
 	 * Gets a string
 	 * 
