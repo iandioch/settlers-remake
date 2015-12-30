@@ -294,12 +294,12 @@ public class SwingManagedJSettlers extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-			FXMLLoader fxmlLoader = new FXMLLoader();
-			fxmlLoader.setResources(new PropertyResourceBundle(Labels.getMostDominantLocaleStream()));
-			Parent root = fxmlLoader.load(new FileInputStream(new File("src/jsettlers/main/javafx/mainMenu.fxml")));
-			Scene scene = new Scene(root, 500, 500);
-			primaryStage.setScene(scene);
-			primaryStage.show();
-
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		fxmlLoader.setResources(new PropertyResourceBundle(Labels.getMostDominantLocaleStream()));
+		Parent root = fxmlLoader.load(new FileInputStream(new File("src/jsettlers/main/javafx/mainMenu.fxml")));
+		Scene scene = new Scene(root);
+		scene.getStylesheets().add("file:///" + new File("src/jsettlers/main/javafx/mainMenu.css").getAbsolutePath().replace("\\", "/"));
+		primaryStage.setScene(scene);
+		primaryStage.show();
 	}
 }
