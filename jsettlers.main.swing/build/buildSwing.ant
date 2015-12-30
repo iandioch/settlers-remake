@@ -18,12 +18,12 @@
 
 	<!-- define targets -->
 
-	<target name="createSwingJar" depends="clean,copyLibs">
+	<target name="createSwingJar" depends="clean,copyLibs,copySwingResources">
 		<ant antfile="jsettlers.main.swing/build/build.ant" useNativeBasedir="true" inheritAll="false" target="build" />
 
 		<jar destfile="${targetLocation}/JSettlers/JSettlers.jar">
 			<manifest>
-				<attribute name="Main-Class" value="jsettlers.main.swing.SwingManagedJSettlers" />
+				<attribute name="Main-Class" value="jsettlers.main.javafx.JavaFxJSettlersApplication" />
 				<attribute name="Class-Path" value=". ${targetLibFolderName}/gluegen-rt.jar ${targetLibFolderName}/jogl-all.jar" />
 			</manifest>
 			<fileset dir="jsettlers.main.swing/bin" />

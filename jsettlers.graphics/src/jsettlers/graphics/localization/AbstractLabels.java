@@ -70,6 +70,10 @@ public abstract class AbstractLabels {
 	protected Locale usedLocale;
 	protected LocaleSuffix usedLocaleSuffix;
 
+	public AbstractLabels() {
+		getLabels(); // ensure usedLocale and usedLocaleSuffix are initialized
+	}
+
 	private synchronized Properties getLabels() {
 		if (!labelsLoaded) {
 			loadLabels();
