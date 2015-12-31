@@ -26,6 +26,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import jsettlers.common.utils.MainUtils;
+import jsettlers.common.utils.OptionableProperties;
 import jsettlers.graphics.localization.Labels;
 import jsettlers.main.swing.SwingManagedJSettlers;
 
@@ -46,9 +47,9 @@ public class JavaFxJSettlersApplication extends Application {
 	}
 
 	public static void main(String args[]) throws FileNotFoundException, IOException {
-		HashMap<String, String> argsMap = MainUtils.createArgumentsMap(args);
+		OptionableProperties optionableProperties = MainUtils.loadOptions(args);
 
-		SwingManagedJSettlers.setupResourceManagers(argsMap, "config.prp");
+		SwingManagedJSettlers.setupResourceManagers(optionableProperties, "config.prp");
 
 		launch(args);
 	}
