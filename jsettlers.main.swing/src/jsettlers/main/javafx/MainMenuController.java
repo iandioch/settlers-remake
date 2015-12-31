@@ -14,19 +14,10 @@
  *******************************************************************************/
 package jsettlers.main.javafx;
 
-import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
-import jsettlers.common.images.EImageLinkType;
-import jsettlers.common.images.OriginalImageLink;
-import jsettlers.graphics.image.SingleImage;
-import jsettlers.graphics.map.draw.ImageProvider;
-
-import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
