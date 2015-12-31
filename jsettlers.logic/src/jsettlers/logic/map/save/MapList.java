@@ -27,10 +27,12 @@ import jsettlers.common.resources.ResourceManager;
 import jsettlers.common.utils.collections.ChangingList;
 import jsettlers.input.PlayerState;
 import jsettlers.logic.map.MapLoader;
+import jsettlers.logic.constants.MatchConstants;
 import jsettlers.logic.map.grid.GameSerializer;
 import jsettlers.logic.map.grid.MainGrid;
 import jsettlers.logic.map.save.IMapLister.IMapListerCallable;
 import jsettlers.logic.map.save.MapFileHeader.MapType;
+import jsettlers.logic.map.save.loader.RemakeMapLoader;
 import jsettlers.logic.timer.RescheduleTimer;
 
 /**
@@ -68,7 +70,7 @@ public class MapList implements IMapListerCallable {
 	private final IMapLister originalMapsDirectory;
 
 	private final ChangingList<MapLoader> freshMaps = new ChangingList<>();
-	private final ChangingList<MapLoader> savedMaps = new ChangingList<>();
+	private final ChangingList<RemakeMapLoader> savedMaps = new ChangingList<>();
 
 	private boolean fileListLoaded = false;
 
@@ -106,7 +108,7 @@ public class MapList implements IMapListerCallable {
 			MapType type = loader.getFileHeader().getType();
 
 			if ((type == MapType.SAVED_SINGLE)) {
-				savedMaps.add(loader);
+				savedMaps.add((RemakeMapLoader) loader);
 			} else {
 				freshMaps.add(loader);
 			}
@@ -116,7 +118,7 @@ public class MapList implements IMapListerCallable {
 		}
 	}
 
-	public synchronized ChangingList<MapLoader> getSavedMaps() {
+	public synchronized ChangingList<RemakeMapLoader> getSavedMaps() {
 		if (!fileListLoaded) {
 			loadFileList();
 			fileListLoaded = true;
@@ -210,6 +212,7 @@ public class MapList implements IMapListerCallable {
 		header.writeTo(outStream);
 
 		ObjectOutputStream oos = new ObjectOutputStream(outStream);
+		MatchConstants.serialize(oos);
 		oos.writeObject(playerStates);
 		GameSerializer gameSerializer = new GameSerializer();
 		gameSerializer.save(grid, oos);
@@ -230,19 +233,12 @@ public class MapList implements IMapListerCallable {
 	 * gets the list of the default directory.
 	 * 
 	 * @return
-	 * @param originalSettlersFolder
 	 */
 	public static synchronized MapList getDefaultList() {
 		if (defaultList == null) {
 			defaultList = mapListFactory.getMapList();
 		}
 		return defaultList;
-	}
-
-	public void deleteLoadableGame(MapLoader game) {
-		game.getListedMap().delete();
-		savedMaps.remove(game); // - TODO: or freshMaps.remove ?
-		loadFileList();
 	}
 
 	public static void setDefaultListFactory(IMapListFactory factory) {
