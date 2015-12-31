@@ -5,32 +5,31 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="startMenuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jsettlers.main.javafx.MainMenuController">
     <center>
         <VBox alignment="CENTER" maxWidth="250.0" prefHeight="200.0" prefWidth="500.0" spacing="20.0" BorderPane.alignment="CENTER">
             <children>
-                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-newgame">
+                <Button fx:id="newGameButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-newgame">
                     <padding>
                         <Insets bottom="10.0" top="10.0" />
                     </padding>
                 </Button>
-                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-loadgame">
+                <Button fx:id="loadGameButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-loadgame">
                     <padding>
                         <Insets bottom="10.0" top="10.0" />
                     </padding>
                 </Button>
-                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-newmultiplayer">
+                <Button fx:id="newMultiPlayerButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-newmultiplayer">
                     <padding>
                         <Insets bottom="10.0" top="10.0" />
                     </padding>
                 </Button>
-                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-joinmultiplayer">
+                <Button fx:id="joinMultiPlayerButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-joinmultiplayer">
                     <padding>
                         <Insets bottom="10.0" top="10.0" />
                     </padding>
                 </Button>
-                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%settings-title">
+                <Button fx:id="settingsButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%settings-title">
                     <padding>
                         <Insets bottom="10.0" top="10.0" />
                     </padding>
@@ -57,22 +56,22 @@
             <bottom>
                 <VBox BorderPane.alignment="CENTER">
                     <children>
-                        <Button id="newGameGoButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%newgame-go">
+                        <Button fx:id="newGameGoButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%newgame-go">
                             <padding>
                                 <Insets bottom="10.0" top="10.0" />
                             </padding>
                         </Button>
-                        <Button id="loadGameGoButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-loadgame-go">
+                        <Button fx:id="loadGameGoButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-loadgame-go">
                             <padding>
                                 <Insets bottom="10.0" top="10.0" />
                             </padding>
                         </Button>
-                        <Button id="newMultiPlayerGoButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-newmultiplayer-go">
+                        <Button fx:id="newMultiPlayerGoButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-newmultiplayer-go">
                             <padding>
                                 <Insets bottom="10.0" top="10.0" />
                             </padding>
                         </Button>
-                        <Button id="joinMultiplayerGoButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-joinmultiplayer-go">
+                        <Button fx:id="joinMultiPlayerGoButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-joinmultiplayer-go">
                             <padding>
                                 <Insets bottom="10.0" top="10.0" />
                             </padding>
