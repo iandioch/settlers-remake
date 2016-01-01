@@ -14,11 +14,7 @@
  *******************************************************************************/
 package jsettlers.main.javafx;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.PropertyResourceBundle;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -27,26 +23,21 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import jsettlers.common.utils.MainUtils;
 import jsettlers.common.utils.OptionableProperties;
-import jsettlers.graphics.localization.Labels;
 import jsettlers.main.swing.SwingManagedJSettlers;
 
 public class JavaFxJSettlersApplication extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		FXMLLoader fxmlLoader = new FXMLLoader();
-
-		InputStreamReader reader = new InputStreamReader(Labels.getMostDominantLocaleStream()); // using reader ensures the usage of correct encoding
-		System.out.println("Encoding of locale file: " + reader.getEncoding());
-		fxmlLoader.setResources(new PropertyResourceBundle(reader));
-		Parent root = fxmlLoader.load(getClass().getResource("mainMenu.fxml").openStream());
+		FXMLLoader fxmlLoader = UiUtils.createFxmlLoader();
+		Parent root = fxmlLoader.load(getClass().getResource("/jsettlers/main/javafx/main/mainMenu.fxml").openStream());
 		Scene scene = new Scene(root);
-		scene.getStylesheets().add("jsettlers/main/javafx/mainMenu.css");
+		scene.getStylesheets().add("/jsettlers/main/javafx/base.css");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 
-	public static void main(String args[]) throws FileNotFoundException, IOException {
+	public static void main(String args[]) throws IOException {
 		OptionableProperties optionableProperties = MainUtils.loadOptions(args);
 
 		SwingManagedJSettlers.setupResourceManagers(optionableProperties, "config.prp");

@@ -12,12 +12,15 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package jsettlers.main.javafx;
+package jsettlers.main.javafx.settings;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.layout.*;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import jsettlers.main.javafx.UiUtils;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,35 +28,18 @@ import java.util.ResourceBundle;
 /**
  * @author codingberlin
  */
-public class MainMenuController implements Initializable {
+public class SettingsMenuController implements Initializable {
 
-	@FXML private BorderPane startMenuPane;
-	@FXML private Button settingsButton;
-	@FXML private Button newGameGoButton;
-	@FXML private Button joinMultiPlayerGoButton;
-	@FXML private Button newMultiPlayerGoButton;
-	@FXML private Button loadGameGoButton;
-	@FXML private Button newGameButton;
-	@FXML private Button joinMultiPlayerButton;
-	@FXML private Button newMultiPlayerButton;
-	@FXML private Button loadGameButton;
+	@FXML public Slider volumeSlider;
+	@FXML public TextField nameField;
+	@FXML public Button backButton;
+	@FXML public Button okButton;
+	@FXML public BorderPane settingsMenuPane;
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		// overall background
-		BackgroundImageUtils.setGuiBackground(startMenuPane, 2, 29);
+	@Override public void initialize(URL location, ResourceBundle resources) {
+		UiUtils.setGuiBackground(settingsMenuPane, 2, 29);
+		UiUtils.setButtonBackgrounds(okButton);
+		UiUtils.setButtonBackgrounds(backButton);
 
-		// buttons not pressed
-		BackgroundImageUtils.setGuiBackground(settingsButton, 3, 326);
-		BackgroundImageUtils.setGuiBackground(newGameGoButton, 3, 326);
-		BackgroundImageUtils.setGuiBackground(joinMultiPlayerGoButton, 3, 326);
-		BackgroundImageUtils.setGuiBackground(newMultiPlayerGoButton, 3, 326);
-		BackgroundImageUtils.setGuiBackground(loadGameGoButton, 3, 326);
-		BackgroundImageUtils.setGuiBackground(newGameButton, 3, 326);
-		BackgroundImageUtils.setGuiBackground(joinMultiPlayerButton, 3, 326);
-		BackgroundImageUtils.setGuiBackground(newMultiPlayerButton, 3, 326);
-		BackgroundImageUtils.setGuiBackground(loadGameButton, 3, 326);
-
-		//TODO buttons pressed - 3, 329
 	}
 }

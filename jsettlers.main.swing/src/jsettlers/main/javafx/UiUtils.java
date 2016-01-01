@@ -16,16 +16,30 @@
 package jsettlers.main.javafx;
 
 import javafx.embed.swing.SwingFXUtils;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
+import jsettlers.graphics.localization.Labels;
 import jsettlers.graphics.map.draw.ImageProvider;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.PropertyResourceBundle;
 
 /**
  * @author codingberlin
  */
-public class BackgroundImageUtils {
+public class UiUtils {
+
+	public static FXMLLoader createFxmlLoader() throws IOException {
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		InputStreamReader reader = null; // using reader ensures the usage of correct encoding
+		reader = new InputStreamReader(Labels.getMostDominantLocaleStream());
+		System.out.println("Encoding of locale file: " + reader.getEncoding());
+		fxmlLoader.setResources(new PropertyResourceBundle(reader));
+		return fxmlLoader;
+	}
 
 	public static void setGuiBackground(Region region, int guiFile, int sequenceNumber) {
 		BufferedImage bufferedBackgroundImage = ImageProvider.getInstance().getGuiImage(guiFile, sequenceNumber).generateBufferedImage();
@@ -42,4 +56,15 @@ public class BackgroundImageUtils {
 								new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, false, true))));
 
 	}
+
+	public static void setButtonBackgrounds(Region button) {
+		UiUtils.setGuiBackground(button, 3, 326);
+
+		button.setOnMouseClicked(e -> {
+			UiUtils.setGuiBackground(button, 3, 329);
+		});
+	}
+
+
+
 }

@@ -5,30 +5,35 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="startMenuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jsettlers.main.javafx.MainMenuController">
+
+<BorderPane fx:id="startMenuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jsettlers.main.javafx.main.MainMenuController">
+
     <center>
         <VBox alignment="CENTER" maxWidth="250.0" prefHeight="200.0" prefWidth="500.0" spacing="20.0" BorderPane.alignment="CENTER">
+            <fx:define>
+                <ToggleGroup fx:id="startMenuToggleButtons"/>
+            </fx:define>
             <children>
-                <Button fx:id="newGameButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-newgame">
+                <ToggleButton fx:id="newGameButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-newgame" toggleGroup="$startMenuToggleButtons">
                     <padding>
                         <Insets bottom="10.0" top="10.0" />
                     </padding>
-                </Button>
-                <Button fx:id="loadGameButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-loadgame">
+                </ToggleButton>
+                <ToggleButton fx:id="loadGameButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-loadgame" toggleGroup="$startMenuToggleButtons">
                     <padding>
                         <Insets bottom="10.0" top="10.0" />
                     </padding>
-                </Button>
-                <Button fx:id="newMultiPlayerButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-newmultiplayer">
+                </ToggleButton>
+                <ToggleButton fx:id="newMultiPlayerButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-newmultiplayer" toggleGroup="$startMenuToggleButtons">
                     <padding>
                         <Insets bottom="10.0" top="10.0" />
                     </padding>
-                </Button>
-                <Button fx:id="joinMultiPlayerButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-joinmultiplayer">
+                </ToggleButton>
+                <ToggleButton fx:id="joinMultiPlayerButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-joinmultiplayer" toggleGroup="$startMenuToggleButtons">
                     <padding>
                         <Insets bottom="10.0" top="10.0" />
                     </padding>
-                </Button>
+                </ToggleButton>
                 <Button fx:id="settingsButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%settings-title">
                     <padding>
                         <Insets bottom="10.0" top="10.0" />
@@ -41,7 +46,7 @@
         </VBox>
     </center>
     <right>
-        <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <BorderPane fx:id="selectFromListPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <center>
                 <ListView id="listView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
             </center>
