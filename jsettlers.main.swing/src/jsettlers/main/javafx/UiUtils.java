@@ -60,7 +60,7 @@ public class UiUtils {
 	public static void setButtonBackgrounds(Region button) {
 		UiUtils.setGuiBackground(button, 3, 326);
 
-		button.setOnMouseClicked(e -> {
+		button.setOnMousePressed(e -> {
 			UiUtils.setGuiBackground(button, 3, 329);
 		});
 	}
