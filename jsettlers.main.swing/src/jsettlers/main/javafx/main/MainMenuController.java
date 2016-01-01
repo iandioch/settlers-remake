@@ -26,11 +26,14 @@ import jsettlers.logic.map.save.loader.SavegameLoader;
 import jsettlers.main.javafx.SettlersApplicationController;
 import jsettlers.main.javafx.UiUtils;
 
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author codingberlin
@@ -54,6 +57,9 @@ public class MainMenuController extends SettlersApplicationController implements
 	@FXML private ListView<RemakeMapLoader> listView;
 	@FXML private TextField listViewFilterField;
 
+	private ButtonBase[] goButtons;
+	private ButtonBase[] allButtons;
+
 	public MainMenuController() {
 		savegameListViewCellFactory = new Callback<ListView<RemakeMapLoader>, ListCell<RemakeMapLoader>>() {
 			@Override
@@ -65,7 +71,7 @@ public class MainMenuController extends SettlersApplicationController implements
 						if (mapLoader != null) {
 							DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Labels.preferredLocale);
 							String formattedDate = dateFormat.format(mapLoader.getCreationDate());
-							String[] values = {formattedDate, mapLoader.getMapName()};
+							String[] values = { formattedDate, mapLoader.getMapName() };
 							setText(String.format("%s (%s)", values));
 						}
 					}
@@ -76,6 +82,10 @@ public class MainMenuController extends SettlersApplicationController implements
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		goButtons = new ButtonBase[] { newGameGoButton, joinMultiPlayerGoButton, newMultiPlayerGoButton, loadGameGoButton };
+		allButtons = new ButtonBase[] { loadGameButton, joinMultiPlayerButton, settingsButton, exitButton, newGameButton, newGameGoButton,
+				joinMultiPlayerGoButton, newMultiPlayerGoButton, loadGameGoButton, newMultiPlayerButton };
+
 		settingsButton.setOnAction(event -> {
 			settlersApplication.showSettingsScene();
 		});
@@ -87,16 +97,7 @@ public class MainMenuController extends SettlersApplicationController implements
 
 	private void setOriginalSettlersBackgroundImages() {
 		UiUtils.setGuiBackground(startMenuPane, 2, 29);
-		UiUtils.registerMousePressedBackgroundChange(settingsButton);
-		UiUtils.registerMousePressedBackgroundChange(newGameGoButton);
-		UiUtils.registerMousePressedBackgroundChange(joinMultiPlayerGoButton);
-		UiUtils.registerMousePressedBackgroundChange(newMultiPlayerGoButton);
-		UiUtils.registerMousePressedBackgroundChange(loadGameGoButton);
-		UiUtils.registerMousePressedBackgroundChange(newGameButton);
-		UiUtils.registerMousePressedBackgroundChange(joinMultiPlayerButton);
-		UiUtils.registerMousePressedBackgroundChange(newMultiPlayerButton);
-		UiUtils.registerMousePressedBackgroundChange(loadGameButton);
-		UiUtils.registerMousePressedBackgroundChange(exitButton);
+		Arrays.stream(allButtons).forEach(UiUtils::registerMousePressedBackgroundChange);
 
 		startMenuToggleButtons.selectedToggleProperty().addListener((observableValue, buttonToDisable, buttonToEnable) -> {
 			if (buttonToDisable != null) {
@@ -114,20 +115,19 @@ public class MainMenuController extends SettlersApplicationController implements
 			listView.getItems().addAll(singlePlayerSaveGames);
 			listView.setCellFactory(savegameListViewCellFactory);
 			selectFromListPane.setVisible(true);
+			hideGoButtons();
+			loadGameGoButton.setVisible(true);
+		});
+	}
+
+	private void hideGoButtons() {
+		Arrays.stream(goButtons).forEach(button -> {
+			button.setVisible(false);
 		});
 	}
 
 	@Override public void resetUiState() {
-		UiUtils.setInitialButtonBackground(settingsButton);
-		UiUtils.setInitialButtonBackground(newGameGoButton);
-		UiUtils.setInitialButtonBackground(joinMultiPlayerGoButton);
-		UiUtils.setInitialButtonBackground(newMultiPlayerGoButton);
-		UiUtils.setInitialButtonBackground(loadGameGoButton);
-		UiUtils.setInitialButtonBackground(newGameButton);
-		UiUtils.setInitialButtonBackground(joinMultiPlayerButton);
-		UiUtils.setInitialButtonBackground(newMultiPlayerButton);
-		UiUtils.setInitialButtonBackground(loadGameButton);
-		UiUtils.setInitialButtonBackground(exitButton);
+		Arrays.stream(allButtons).forEach(UiUtils::setInitialButtonBackground);
 
 		listViewFilterField.setText("");
 		listView.getItems().clear();
