@@ -12,17 +12,30 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package jsettlers.main.javafx;
+
+package jsettlers.main;
+
+import javafx.scene.Scene;
+import jsettlers.main.javafx.SettlersApplicationController;
 
 /**
  * @author codingberlin
  */
-public abstract class SettlersApplicationController {
-	protected JavaFxJSettlersApplication settlersApplication;
+public class SceneAndController {
 
-	public void setSettlersApplication(JavaFxJSettlersApplication settlersApplication) {
-		this.settlersApplication = settlersApplication;
+	private final Scene scene;
+	private final SettlersApplicationController controller;
+
+	public SceneAndController(Scene scene, SettlersApplicationController controller) {
+		this.scene = scene;
+		this.controller = controller;
 	}
 
-	public abstract void resetUiState();
+	public Scene getScene() {
+		return scene;
+	}
+
+	public SettlersApplicationController getController() {
+		return controller;
+	}
 }

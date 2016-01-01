@@ -57,12 +57,14 @@ public class UiUtils {
 
 	}
 
-	public static void setButtonBackgrounds(Region button) {
-		UiUtils.setGuiBackground(button, 3, 326);
-
+	public static void registerMousePressedBackgroundChange(Region button) {
 		button.setOnMousePressed(e -> {
 			UiUtils.setGuiBackground(button, 3, 329);
 		});
+	}
+
+	public static void setInitialButtonBackground(Region button) {
+		UiUtils.setGuiBackground(button, 3, 326);
 	}
 
 

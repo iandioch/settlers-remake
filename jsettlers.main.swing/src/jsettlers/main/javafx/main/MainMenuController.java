@@ -46,31 +46,47 @@ public class MainMenuController extends SettlersApplicationController implements
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		selectFromListPane.setVisible(false);
-
 		settingsButton.setOnAction(event -> {
 			settlersApplication.showSettingsScene();
 		});
 
 		setOriginalSettlersBackgroundImages();
+
+		resetUiState();
 	}
+
+
 
 	private void setOriginalSettlersBackgroundImages() {
 		UiUtils.setGuiBackground(startMenuPane, 2, 29);
-		UiUtils.setButtonBackgrounds(settingsButton);
-		UiUtils.setButtonBackgrounds(newGameGoButton);
-		UiUtils.setButtonBackgrounds(joinMultiPlayerGoButton);
-		UiUtils.setButtonBackgrounds(newMultiPlayerGoButton);
-		UiUtils.setButtonBackgrounds(loadGameGoButton);
-		UiUtils.setButtonBackgrounds(newGameButton);
-		UiUtils.setButtonBackgrounds(joinMultiPlayerButton);
-		UiUtils.setButtonBackgrounds(newMultiPlayerButton);
-		UiUtils.setButtonBackgrounds(loadGameButton);
+		UiUtils.registerMousePressedBackgroundChange(settingsButton);
+		UiUtils.registerMousePressedBackgroundChange(newGameGoButton);
+		UiUtils.registerMousePressedBackgroundChange(joinMultiPlayerGoButton);
+		UiUtils.registerMousePressedBackgroundChange(newMultiPlayerGoButton);
+		UiUtils.registerMousePressedBackgroundChange(loadGameGoButton);
+		UiUtils.registerMousePressedBackgroundChange(newGameButton);
+		UiUtils.registerMousePressedBackgroundChange(joinMultiPlayerButton);
+		UiUtils.registerMousePressedBackgroundChange(newMultiPlayerButton);
+		UiUtils.registerMousePressedBackgroundChange(loadGameButton);
 
 		startMenuToggleButtons.selectedToggleProperty().addListener((observableValue, buttonToDisable, buttonToEnable) -> {
 			if (buttonToDisable != null) {
 				UiUtils.setGuiBackground((ToggleButton) buttonToDisable, 3, 326);
 			}
 		});
+	}
+
+	@Override public void resetUiState() {
+		UiUtils.setInitialButtonBackground(settingsButton);
+		UiUtils.setInitialButtonBackground(newGameGoButton);
+		UiUtils.setInitialButtonBackground(joinMultiPlayerGoButton);
+		UiUtils.setInitialButtonBackground(newMultiPlayerGoButton);
+		UiUtils.setInitialButtonBackground(loadGameGoButton);
+		UiUtils.setInitialButtonBackground(newGameButton);
+		UiUtils.setInitialButtonBackground(joinMultiPlayerButton);
+		UiUtils.setInitialButtonBackground(newMultiPlayerButton);
+		UiUtils.setInitialButtonBackground(loadGameButton);
+
+		selectFromListPane.setVisible(false);
 	}
 }

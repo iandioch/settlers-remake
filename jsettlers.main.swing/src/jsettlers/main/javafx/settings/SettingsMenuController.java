@@ -40,6 +40,8 @@ public class SettingsMenuController extends SettlersApplicationController implem
 	@Override public void initialize(URL location, ResourceBundle resources) {
 		setOriginalSettlersBackgroundImages();
 
+		resetUiState();
+
 		backButton.setOnAction(event -> {
 			settlersApplication.showMainScene();
 		});
@@ -51,7 +53,13 @@ public class SettingsMenuController extends SettlersApplicationController implem
 
 	private void setOriginalSettlersBackgroundImages() {
 		UiUtils.setGuiBackground(settingsMenuPane, 2, 29);
-		UiUtils.setButtonBackgrounds(okButton);
-		UiUtils.setButtonBackgrounds(backButton);
+		UiUtils.registerMousePressedBackgroundChange(okButton);
+		UiUtils.registerMousePressedBackgroundChange(backButton);
+	}
+
+	@Override public void resetUiState() {
+		UiUtils.setInitialButtonBackground(okButton);
+		UiUtils.setInitialButtonBackground(backButton);
+
 	}
 }

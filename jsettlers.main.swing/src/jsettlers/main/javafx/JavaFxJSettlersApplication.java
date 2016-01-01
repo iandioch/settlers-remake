@@ -20,28 +20,32 @@ import java.util.PropertyResourceBundle;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import jsettlers.common.utils.MainUtils;
 import jsettlers.common.utils.OptionableProperties;
 import jsettlers.graphics.localization.Labels;
+import jsettlers.main.SceneAndController;
 import jsettlers.main.swing.SwingManagedJSettlers;
 
+/**
+ * @author codingberlin
+ */
 public class JavaFxJSettlersApplication extends Application {
 
-	private Scene mainScene;
-	private Scene settingsScene;
+	private SceneAndController mainSceneAndController;
+	private SceneAndController settingsSceneAndController;
 	private Stage stage;
 
-	private Scene createScene(String fxmlUrl) throws IOException {
+	private SceneAndController createScene(String fxmlUrl) throws IOException {
 		FXMLLoader fxmlLoader = createFxmlLoader();
 		Scene scene = new Scene(fxmlLoader.load(getClass().getResource(fxmlUrl).openStream()));
 		scene.getStylesheets().add("/jsettlers/main/javafx/base.css");
 
-		fxmlLoader.<SettlersApplicationController>getController().setSettlersApplication(this);
+		SettlersApplicationController controller = fxmlLoader.<SettlersApplicationController>getController();
+		controller.setSettlersApplication(this);
 
-		return scene;
+		return new SceneAndController(scene, controller);
 	}
 
 	public FXMLLoader createFxmlLoader() throws IOException {
@@ -54,18 +58,23 @@ public class JavaFxJSettlersApplication extends Application {
 	}
 
 	public void showMainScene() {
-		stage.setScene(mainScene);
+		resetControllerAndShowScene(mainSceneAndController);
 	}
 
 	public void showSettingsScene() {
-		stage.setScene(settingsScene);
+		resetControllerAndShowScene(settingsSceneAndController);
+	}
+
+	private void resetControllerAndShowScene(SceneAndController sceneAndController) {
+		sceneAndController.getController().resetUiState();
+		stage.setScene(sceneAndController.getScene());
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		stage = primaryStage;
-		mainScene = createScene("/jsettlers/main/javafx/main/mainMenu.fxml");
-		settingsScene = createScene("/jsettlers/main/javafx/settings/SettingsMenu.fxml");
+		mainSceneAndController = createScene("/jsettlers/main/javafx/main/mainMenu.fxml");
+		settingsSceneAndController = createScene("/jsettlers/main/javafx/settings/SettingsMenu.fxml");
 		showMainScene();
 
 		stage.show();
