@@ -57,6 +57,10 @@ public class JavaFxJSettlersApplication extends Application {
 		return fxmlLoader;
 	}
 
+	public void close() {
+		stage.close();
+	}
+
 	public void showMainScene() {
 		resetControllerAndShowScene(mainSceneAndController);
 	}

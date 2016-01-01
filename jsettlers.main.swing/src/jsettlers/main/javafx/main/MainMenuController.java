@@ -33,6 +33,7 @@ public class MainMenuController extends SettlersApplicationController implements
 
 	@FXML private BorderPane startMenuPane;
 	@FXML private Button settingsButton;
+	@FXML private Button exitButton;
 	@FXML private Button newGameGoButton;
 	@FXML private Button joinMultiPlayerGoButton;
 	@FXML private Button newMultiPlayerGoButton;
@@ -68,11 +69,16 @@ public class MainMenuController extends SettlersApplicationController implements
 		UiUtils.registerMousePressedBackgroundChange(joinMultiPlayerButton);
 		UiUtils.registerMousePressedBackgroundChange(newMultiPlayerButton);
 		UiUtils.registerMousePressedBackgroundChange(loadGameButton);
+		UiUtils.registerMousePressedBackgroundChange(exitButton);
 
 		startMenuToggleButtons.selectedToggleProperty().addListener((observableValue, buttonToDisable, buttonToEnable) -> {
 			if (buttonToDisable != null) {
 				UiUtils.setGuiBackground((ToggleButton) buttonToDisable, 3, 326);
 			}
+		});
+
+		exitButton.setOnAction(e -> {
+			settlersApplication.close();
 		});
 	}
 
@@ -86,6 +92,7 @@ public class MainMenuController extends SettlersApplicationController implements
 		UiUtils.setInitialButtonBackground(joinMultiPlayerButton);
 		UiUtils.setInitialButtonBackground(newMultiPlayerButton);
 		UiUtils.setInitialButtonBackground(loadGameButton);
+		UiUtils.setInitialButtonBackground(exitButton);
 
 		selectFromListPane.setVisible(false);
 	}
