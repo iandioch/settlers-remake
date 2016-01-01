@@ -16,21 +16,28 @@ package jsettlers.main.javafx.main;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.util.Callback;
+import jsettlers.graphics.localization.Labels;
+import jsettlers.logic.map.save.MapList;
+import jsettlers.logic.map.save.loader.RemakeMapLoader;
+import jsettlers.logic.map.save.loader.SavegameLoader;
 import jsettlers.main.javafx.SettlersApplicationController;
 import jsettlers.main.javafx.UiUtils;
 
 import java.net.URL;
+import java.text.DateFormat;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 /**
  * @author codingberlin
  */
 public class MainMenuController extends SettlersApplicationController implements Initializable {
 
+	private final Callback<ListView<RemakeMapLoader>, ListCell<RemakeMapLoader>> savegameListViewCellFactory;
 	@FXML private BorderPane startMenuPane;
 	@FXML private Button settingsButton;
 	@FXML private Button exitButton;
@@ -44,6 +51,28 @@ public class MainMenuController extends SettlersApplicationController implements
 	@FXML private ToggleButton loadGameButton;
 	@FXML private ToggleGroup startMenuToggleButtons;
 	@FXML private BorderPane selectFromListPane;
+	@FXML private ListView<RemakeMapLoader> listView;
+	@FXML private TextField listViewFilterField;
+
+	public MainMenuController() {
+		savegameListViewCellFactory = new Callback<ListView<RemakeMapLoader>, ListCell<RemakeMapLoader>>() {
+			@Override
+			public ListCell<RemakeMapLoader> call(ListView<RemakeMapLoader> listView) {
+				return new ListCell<RemakeMapLoader>() {
+					@Override
+					protected void updateItem(RemakeMapLoader mapLoader, boolean isEmpty) {
+						super.updateItem(mapLoader, isEmpty);
+						if (mapLoader != null) {
+							DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Labels.preferredLocale);
+							String formattedDate = dateFormat.format(mapLoader.getCreationDate());
+							String[] values = {formattedDate, mapLoader.getMapName()};
+							setText(String.format("%s (%s)", values));
+						}
+					}
+				};
+			}
+		};
+	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -55,8 +84,6 @@ public class MainMenuController extends SettlersApplicationController implements
 
 		resetUiState();
 	}
-
-
 
 	private void setOriginalSettlersBackgroundImages() {
 		UiUtils.setGuiBackground(startMenuPane, 2, 29);
@@ -80,6 +107,14 @@ public class MainMenuController extends SettlersApplicationController implements
 		exitButton.setOnAction(e -> {
 			settlersApplication.close();
 		});
+
+		loadGameButton.setOnAction(e -> {
+			MapList mapList = MapList.getDefaultList();
+			List<RemakeMapLoader> singlePlayerSaveGames = mapList.getSavedMaps().getItems();
+			listView.getItems().addAll(singlePlayerSaveGames);
+			listView.setCellFactory(savegameListViewCellFactory);
+			selectFromListPane.setVisible(true);
+		});
 	}
 
 	@Override public void resetUiState() {
@@ -94,6 +129,9 @@ public class MainMenuController extends SettlersApplicationController implements
 		UiUtils.setInitialButtonBackground(loadGameButton);
 		UiUtils.setInitialButtonBackground(exitButton);
 
+		listViewFilterField.setText("");
+		listView.getItems().clear();
 		selectFromListPane.setVisible(false);
 	}
+
 }

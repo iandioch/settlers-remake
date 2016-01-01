@@ -52,17 +52,17 @@
     </center>
     <right>
         <BorderPane fx:id="selectFromListPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <center>
-                <ListView id="listView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-            </center>
             <top>
                 <VBox BorderPane.alignment="CENTER">
                     <children>
                         <Label text="%start-filter" />
-                        <TextField id="listViewFilterField" />
+                        <TextField fx:id="listViewFilterField" />
                     </children>
                 </VBox>
             </top>
+            <center>
+                <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            </center>
             <bottom>
                 <VBox BorderPane.alignment="CENTER">
                     <children>
