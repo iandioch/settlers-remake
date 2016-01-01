@@ -12,46 +12,15 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package jsettlers.main.javafx.settings;
-
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import jsettlers.main.javafx.SettlersApplicationController;
-import jsettlers.main.javafx.UiUtils;
-
-import java.net.URL;
-import java.util.ResourceBundle;
+package jsettlers.main.javafx;
 
 /**
  * @author codingberlin
  */
-public class SettingsMenuController extends SettlersApplicationController implements Initializable {
+public class SettlersApplicationController {
+	protected JavaFxJSettlersApplication settlersApplication;
 
-	@FXML private Slider volumeSlider;
-	@FXML private TextField nameField;
-	@FXML private Button backButton;
-	@FXML private Button okButton;
-	@FXML private BorderPane settingsMenuPane;
-
-	@Override public void initialize(URL location, ResourceBundle resources) {
-		setOriginalSettlersBackgroundImages();
-
-		backButton.setOnAction(event -> {
-			settlersApplication.showMainScene();
-		});
-
-		okButton.setOnAction(event -> {
-			settlersApplication.showMainScene();
-		});
-	}
-
-	private void setOriginalSettlersBackgroundImages() {
-		UiUtils.setGuiBackground(settingsMenuPane, 2, 29);
-		UiUtils.setButtonBackgrounds(okButton);
-		UiUtils.setButtonBackgrounds(backButton);
+	public void setSettlersApplication(JavaFxJSettlersApplication settlersApplication) {
+		this.settlersApplication = settlersApplication;
 	}
 }

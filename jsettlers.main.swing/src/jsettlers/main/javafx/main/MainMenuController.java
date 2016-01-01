@@ -15,29 +15,21 @@
 package jsettlers.main.javafx.main;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
+import jsettlers.main.javafx.SettlersApplicationController;
 import jsettlers.main.javafx.UiUtils;
-import jsettlers.main.javafx.JavaFxJSettlersApplication;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
  * @author codingberlin
  */
-public class MainMenuController implements Initializable {
-
-	private Scene settingsScene;
+public class MainMenuController extends SettlersApplicationController implements Initializable {
 
 	@FXML private BorderPane startMenuPane;
 	@FXML private Button settingsButton;
@@ -52,21 +44,19 @@ public class MainMenuController implements Initializable {
 	@FXML private ToggleGroup startMenuToggleButtons;
 	@FXML private BorderPane selectFromListPane;
 
-	public MainMenuController() throws IOException {
-		FXMLLoader fxmlLoader = UiUtils.createFxmlLoader();
-		Parent root = fxmlLoader.load(getClass().getResource("/jsettlers/main/javafx/settings/settingsMenu.fxml").openStream());
-		settingsScene = new Scene(root);
-		settingsScene.getStylesheets().add("/jsettlers/main/javafx/base.css");
-	}
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		selectFromListPane.setVisible(false);
 
-		// overall background
-		UiUtils.setGuiBackground(startMenuPane, 2, 29);
+		settingsButton.setOnAction(event -> {
+			settlersApplication.showSettingsScene();
+		});
 
-		// buttons not pressed
+		setOriginalSettlersBackgroundImages();
+	}
+
+	private void setOriginalSettlersBackgroundImages() {
+		UiUtils.setGuiBackground(startMenuPane, 2, 29);
 		UiUtils.setButtonBackgrounds(settingsButton);
 		UiUtils.setButtonBackgrounds(newGameGoButton);
 		UiUtils.setButtonBackgrounds(joinMultiPlayerGoButton);
@@ -82,10 +72,5 @@ public class MainMenuController implements Initializable {
 				UiUtils.setGuiBackground((ToggleButton) buttonToDisable, 3, 326);
 			}
 		});
-
-		settingsButton.setOnAction(event -> {
-			((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(settingsScene);
-		});
-		//TODO buttons pressed - 3, 329
 	}
 }

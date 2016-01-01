@@ -15,6 +15,8 @@
 package jsettlers.main.javafx;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.PropertyResourceBundle;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -23,18 +25,50 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import jsettlers.common.utils.MainUtils;
 import jsettlers.common.utils.OptionableProperties;
+import jsettlers.graphics.localization.Labels;
 import jsettlers.main.swing.SwingManagedJSettlers;
 
 public class JavaFxJSettlersApplication extends Application {
 
+	private Scene mainScene;
+	private Scene settingsScene;
+	private Stage stage;
+
+	private Scene createScene(String fxmlUrl) throws IOException {
+		FXMLLoader fxmlLoader = createFxmlLoader();
+		Scene scene = new Scene(fxmlLoader.load(getClass().getResource(fxmlUrl).openStream()));
+		scene.getStylesheets().add("/jsettlers/main/javafx/base.css");
+
+		fxmlLoader.<SettlersApplicationController>getController().setSettlersApplication(this);
+
+		return scene;
+	}
+
+	public FXMLLoader createFxmlLoader() throws IOException {
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		InputStreamReader reader = null; // using reader ensures the usage of correct encoding
+		reader = new InputStreamReader(Labels.getMostDominantLocaleStream());
+		System.out.println("Encoding of locale file: " + reader.getEncoding());
+		fxmlLoader.setResources(new PropertyResourceBundle(reader));
+		return fxmlLoader;
+	}
+
+	public void showMainScene() {
+		stage.setScene(mainScene);
+	}
+
+	public void showSettingsScene() {
+		stage.setScene(settingsScene);
+	}
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		FXMLLoader fxmlLoader = UiUtils.createFxmlLoader();
-		Parent root = fxmlLoader.load(getClass().getResource("/jsettlers/main/javafx/main/mainMenu.fxml").openStream());
-		Scene scene = new Scene(root);
-		scene.getStylesheets().add("/jsettlers/main/javafx/base.css");
-		primaryStage.setScene(scene);
-		primaryStage.show();
+		stage = primaryStage;
+		mainScene = createScene("/jsettlers/main/javafx/main/mainMenu.fxml");
+		settingsScene = createScene("/jsettlers/main/javafx/settings/SettingsMenu.fxml");
+		showMainScene();
+
+		stage.show();
 	}
 
 	public static void main(String args[]) throws IOException {
