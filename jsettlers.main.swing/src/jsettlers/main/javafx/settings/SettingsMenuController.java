@@ -20,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import jsettlers.graphics.startscreen.SettingsManager;
 import jsettlers.main.javafx.SettlersApplicationController;
 import jsettlers.main.javafx.UiUtils;
 
@@ -47,6 +48,10 @@ public class SettingsMenuController extends SettlersApplicationController implem
 		});
 
 		okButton.setOnAction(event -> {
+			SettingsManager sm = SettingsManager.getInstance();
+			sm.set(SettingsManager.SETTING_USERNAME, nameField.getText());
+			sm.set(SettingsManager.SETTING_VOLUME, (volumeSlider.getValue() / 100D) + "");
+
 			settlersApplication.showMainScene();
 		});
 	}
@@ -61,5 +66,8 @@ public class SettingsMenuController extends SettlersApplicationController implem
 		UiUtils.setInitialButtonBackground(okButton);
 		UiUtils.setInitialButtonBackground(backButton);
 
+		SettingsManager sm = SettingsManager.getInstance();
+		nameField.setText(sm.getPlayer().getName());
+		volumeSlider.setValue(sm.getVolume() * 100);
 	}
 }
