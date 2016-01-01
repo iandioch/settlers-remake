@@ -27,21 +27,19 @@ import java.awt.image.BufferedImage;
  */
 public class BackgroundImageUtils {
 
+	public static void setGuiBackground(Region region, int guiFile, int sequenceNumber) {
+		BufferedImage bufferedBackgroundImage = ImageProvider.getInstance().getGuiImage(guiFile, sequenceNumber).generateBufferedImage();
+		WritableImage fxImage = new WritableImage(bufferedBackgroundImage.getWidth(), bufferedBackgroundImage.getHeight());
+		SwingFXUtils.toFXImage(bufferedBackgroundImage, fxImage);
 
-    public static void setGuiBackground(Region region, int guiFile, int sequenceNumber) {
-        BufferedImage bufferedBackgroundImage = ImageProvider.getInstance().getGuiImage(guiFile, sequenceNumber).generateBufferedImage();
-        WritableImage fxImage = new WritableImage(bufferedBackgroundImage.getWidth(), bufferedBackgroundImage.getHeight());
-        SwingFXUtils.toFXImage(bufferedBackgroundImage, fxImage);
+		region.setBackground(
+				new Background(
+						new BackgroundImage(
+								fxImage,
+								BackgroundRepeat.NO_REPEAT,
+								BackgroundRepeat.NO_REPEAT,
+								BackgroundPosition.DEFAULT,
+								new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, false, true))));
 
-        region.setBackground(
-                new Background(
-                        new BackgroundImage(
-                                fxImage,
-                                BackgroundRepeat.NO_REPEAT,
-                                BackgroundRepeat.NO_REPEAT,
-                                BackgroundPosition.DEFAULT,
-                                new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, false, true))));
-
-
-    }
+	}
 }
