@@ -14,12 +14,12 @@
  *******************************************************************************/
 package jsettlers.main.javafx.main;
 
+import javafx.collections.FXCollections;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.util.Callback;
-import jsettlers.graphics.localization.Labels;
 import jsettlers.graphics.startscreen.interfaces.IStartingGame;
 import jsettlers.logic.map.save.MapList;
 import jsettlers.logic.map.save.loader.RemakeMapLoader;
@@ -30,9 +30,7 @@ import jsettlers.main.javafx.SettlersApplicationController;
 import jsettlers.main.javafx.UiUtils;
 
 import java.net.URL;
-import java.text.DateFormat;
 import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -40,7 +38,8 @@ import java.util.ResourceBundle;
  */
 public class MainMenuController extends SettlersApplicationController implements Initializable {
 
-	private final Callback<ListView<RemakeMapLoader>, ListCell<RemakeMapLoader>> savegameListViewCellFactory;
+	private final SaveGameListViewCellFactory savegameListViewCellFactory;
+
 	@FXML private BorderPane startMenuPane;
 	@FXML private Button settingsButton;
 	@FXML private Button exitButton;
@@ -61,23 +60,7 @@ public class MainMenuController extends SettlersApplicationController implements
 	private ButtonBase[] allButtons;
 
 	public MainMenuController() {
-		savegameListViewCellFactory = new Callback<ListView<RemakeMapLoader>, ListCell<RemakeMapLoader>>() {
-			@Override
-			public ListCell<RemakeMapLoader> call(ListView<RemakeMapLoader> listView) {
-				return new ListCell<RemakeMapLoader>() {
-					@Override
-					protected void updateItem(RemakeMapLoader mapLoader, boolean isEmpty) {
-						super.updateItem(mapLoader, isEmpty);
-						if (mapLoader != null) {
-							DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Labels.preferredLocale);
-							String formattedDate = dateFormat.format(mapLoader.getCreationDate());
-							String[] values = { formattedDate, mapLoader.getMapName() };
-							setText(String.format("%s (%s)", values));
-						}
-					}
-				};
-			}
-		};
+		savegameListViewCellFactory = new SaveGameListViewCellFactory();
 	}
 
 	@Override
@@ -96,11 +79,20 @@ public class MainMenuController extends SettlersApplicationController implements
 
 		loadGameButton.setOnAction(e -> {
 			MapList mapList = MapList.getDefaultList();
-			listView.getItems().clear();
-			List<RemakeMapLoader> singlePlayerSaveGames = mapList.getSavedMaps().getItems();
-			listView.getItems().addAll(singlePlayerSaveGames);
+			FilteredList<RemakeMapLoader>singlePlayerSaveGames =
+					new FilteredList<>(FXCollections.observableList(mapList.getSavedMaps().getItems()), map -> true);
+			listView.setItems(singlePlayerSaveGames);
 			listView.setCellFactory(savegameListViewCellFactory);
 			selectFromListPane.setVisible(true);
+			listViewFilterField.textProperty().addListener((observable, oldText, newText) -> {
+				if (newText == null || newText.length() == 0) {
+					singlePlayerSaveGames.setPredicate(map -> true);
+				} else {
+					singlePlayerSaveGames.setPredicate(map ->
+							savegameListViewCellFactory.getLabelOf(map).toLowerCase().contains(newText.toLowerCase()));
+				}
+			});
+
 			hideGoButtons();
 			loadGameGoButton.setVisible(true);
 		});
@@ -142,7 +134,6 @@ public class MainMenuController extends SettlersApplicationController implements
 		Arrays.stream(allButtons).forEach(UiUtils::setInitialButtonBackground);
 
 		listViewFilterField.setText("");
-		listView.getItems().clear();
 		selectFromListPane.setVisible(false);
 	}
 
