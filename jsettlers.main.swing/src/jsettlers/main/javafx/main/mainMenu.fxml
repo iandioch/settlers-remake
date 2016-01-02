@@ -6,7 +6,9 @@
 <?import javafx.scene.layout.*?>
 
 
-<BorderPane fx:id="startMenuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jsettlers.main.javafx.main.MainMenuController">
+<BorderPane fx:id="startMenuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0"
+            prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="jsettlers.main.javafx.main.MainMenuController">
 
     <center>
         <VBox alignment="CENTER" maxWidth="250.0" prefHeight="200.0" prefWidth="500.0" spacing="20.0" BorderPane.alignment="CENTER">
@@ -14,39 +16,43 @@
                 <ToggleGroup fx:id="startMenuToggleButtons"/>
             </fx:define>
             <children>
-                <ToggleButton fx:id="newGameButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-newgame" toggleGroup="$startMenuToggleButtons">
+                <ToggleButton fx:id="newGameButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-newgame"
+                              toggleGroup="$startMenuToggleButtons">
                     <padding>
-                        <Insets bottom="10.0" top="10.0" />
+                        <Insets bottom="10.0" top="10.0"/>
                     </padding>
                 </ToggleButton>
-                <ToggleButton fx:id="loadGameButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-loadgame" toggleGroup="$startMenuToggleButtons">
+                <ToggleButton fx:id="loadGameButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-loadgame"
+                              toggleGroup="$startMenuToggleButtons">
                     <padding>
-                        <Insets bottom="10.0" top="10.0" />
+                        <Insets bottom="10.0" top="10.0"/>
                     </padding>
                 </ToggleButton>
-                <ToggleButton fx:id="newMultiPlayerButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-newmultiplayer" toggleGroup="$startMenuToggleButtons">
+                <ToggleButton fx:id="newMultiPlayerButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-newmultiplayer"
+                              toggleGroup="$startMenuToggleButtons">
                     <padding>
-                        <Insets bottom="10.0" top="10.0" />
+                        <Insets bottom="10.0" top="10.0"/>
                     </padding>
                 </ToggleButton>
-                <ToggleButton fx:id="joinMultiPlayerButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-joinmultiplayer" toggleGroup="$startMenuToggleButtons">
+                <ToggleButton fx:id="joinMultiPlayerButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-joinmultiplayer"
+                              toggleGroup="$startMenuToggleButtons">
                     <padding>
-                        <Insets bottom="10.0" top="10.0" />
+                        <Insets bottom="10.0" top="10.0"/>
                     </padding>
                 </ToggleButton>
                 <Button fx:id="settingsButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%settings-title">
                     <padding>
-                        <Insets bottom="10.0" top="10.0" />
+                        <Insets bottom="10.0" top="10.0"/>
                     </padding>
                 </Button>
                 <Button fx:id="exitButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-exit">
                     <padding>
-                        <Insets bottom="10.0" top="10.0" />
+                        <Insets bottom="10.0" top="10.0"/>
                     </padding>
                 </Button>
             </children>
             <opaqueInsets>
-                <Insets />
+                <Insets/>
             </opaqueInsets>
         </VBox>
     </center>
@@ -55,39 +61,20 @@
             <top>
                 <VBox BorderPane.alignment="CENTER">
                     <children>
-                        <Label text="%start-filter" />
-                        <TextField fx:id="listViewFilterField" />
+                        <Label text="%start-filter"/>
+                        <TextField fx:id="listViewFilterField"/>
                     </children>
                 </VBox>
             </top>
             <center>
-                <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
             </center>
             <bottom>
-                <VBox BorderPane.alignment="CENTER">
-                    <children>
-                        <Button fx:id="newGameGoButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%newgame-go">
-                            <padding>
-                                <Insets bottom="10.0" top="10.0" />
-                            </padding>
-                        </Button>
-                        <Button fx:id="loadGameGoButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-loadgame-go">
-                            <padding>
-                                <Insets bottom="10.0" top="10.0" />
-                            </padding>
-                        </Button>
-                        <Button fx:id="newMultiPlayerGoButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-newmultiplayer-go">
-                            <padding>
-                                <Insets bottom="10.0" top="10.0" />
-                            </padding>
-                        </Button>
-                        <Button fx:id="joinMultiPlayerGoButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%start-joinmultiplayer-go">
-                            <padding>
-                                <Insets bottom="10.0" top="10.0" />
-                            </padding>
-                        </Button>
-                    </children>
-                </VBox>
+                <Button fx:id="triggerActionWithSelectedItemButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false">
+                    <padding>
+                        <Insets bottom="10.0" top="10.0"/>
+                    </padding>
+                </Button>
             </bottom>
         </BorderPane>
     </right>

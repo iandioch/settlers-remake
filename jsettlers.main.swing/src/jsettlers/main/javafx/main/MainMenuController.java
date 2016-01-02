@@ -20,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import jsettlers.graphics.localization.Labels;
 import jsettlers.graphics.startscreen.interfaces.IStartingGame;
 import jsettlers.logic.map.save.MapList;
 import jsettlers.logic.map.save.loader.RemakeMapLoader;
@@ -43,10 +44,7 @@ public class MainMenuController extends SettlersApplicationController implements
 	@FXML private BorderPane startMenuPane;
 	@FXML private Button settingsButton;
 	@FXML private Button exitButton;
-	@FXML private Button newGameGoButton;
-	@FXML private Button joinMultiPlayerGoButton;
-	@FXML private Button newMultiPlayerGoButton;
-	@FXML private Button loadGameGoButton;
+	@FXML private Button triggerActionWithSelectedItemButton;
 	@FXML private ToggleButton newGameButton;
 	@FXML private ToggleButton joinMultiPlayerButton;
 	@FXML private ToggleButton newMultiPlayerButton;
@@ -56,7 +54,14 @@ public class MainMenuController extends SettlersApplicationController implements
 	@FXML private ListView<RemakeMapLoader> listView;
 	@FXML private TextField listViewFilterField;
 
-	private ButtonBase[] goButtons;
+
+	/*
+	%start-joinmultiplayer-go
+	%start-newmultiplayer-go
+	%start-loadgame-go
+	%newgame-go
+	 */
+
 	private ButtonBase[] allButtons;
 
 	public MainMenuController() {
@@ -65,9 +70,8 @@ public class MainMenuController extends SettlersApplicationController implements
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		goButtons = new ButtonBase[] { newGameGoButton, joinMultiPlayerGoButton, newMultiPlayerGoButton, loadGameGoButton };
-		allButtons = new ButtonBase[] { loadGameButton, joinMultiPlayerButton, settingsButton, exitButton, newGameButton, newGameGoButton,
-				joinMultiPlayerGoButton, newMultiPlayerGoButton, loadGameGoButton, newMultiPlayerButton };
+		allButtons = new ButtonBase[] { loadGameButton, joinMultiPlayerButton, settingsButton, exitButton, newGameButton,
+				triggerActionWithSelectedItemButton, newMultiPlayerButton };
 
 		settingsButton.setOnAction(event -> {
 			settlersApplication.showSettingsScene();
@@ -78,12 +82,24 @@ public class MainMenuController extends SettlersApplicationController implements
 		});
 
 		loadGameButton.setOnAction(e -> {
+			VoidCallback actionWithSelectedItemHandler = () -> {
+				SavegameLoader savegameLoader = (SavegameLoader) listView.getSelectionModel().getSelectedItem();
+				if (savegameLoader != null) {
+					long randomSeed = 4711L;
+					byte playerId = 0;
+					PlayerSetting[] playerSettings = PlayerSetting.createDefaultSettings(playerId, (byte) savegameLoader.getMaxPlayers());
+					JSettlersGame game = new JSettlersGame(savegameLoader, randomSeed, playerId, playerSettings);
+					IStartingGame startingGame = game.start();
+					settlersApplication.showStartingGameMenu(startingGame);
+				}
+			};
+
 			MapList mapList = MapList.getDefaultList();
-			FilteredList<RemakeMapLoader>singlePlayerSaveGames =
+			FilteredList<RemakeMapLoader> singlePlayerSaveGames =
 					new FilteredList<>(FXCollections.observableList(mapList.getSavedMaps().getItems()), map -> true);
-			listView.setItems(singlePlayerSaveGames);
 			listView.setCellFactory(savegameListViewCellFactory);
-			selectFromListPane.setVisible(true);
+			listView.setItems(singlePlayerSaveGames);
+			listView.getSelectionModel().selectFirst();
 			listViewFilterField.textProperty().addListener((observable, oldText, newText) -> {
 				if (newText == null || newText.length() == 0) {
 					singlePlayerSaveGames.setPredicate(map -> true);
@@ -92,25 +108,50 @@ public class MainMenuController extends SettlersApplicationController implements
 							savegameListViewCellFactory.getLabelOf(map).toLowerCase().contains(newText.toLowerCase()));
 				}
 			});
+			listViewFilterField.setOnKeyReleased(keyEvent -> {
+				switch (keyEvent.getCode()) {
+				case ENTER:
+					actionWithSelectedItemHandler.call();
+					break;
+				case DOWN:
+					int nextIndex = listView.getSelectionModel().getSelectedIndex() + 1;
+					if (nextIndex < listView.getItems().size()) {
+						listView.getSelectionModel().clearSelection();
+						listView.getSelectionModel().select(nextIndex);
+					}
+					break;
+				case UP:
+					int previousIndex = listView.getSelectionModel().getSelectedIndex() - 1;
+					if (previousIndex >= 0) {
+						listView.getSelectionModel().clearSelection();
+						listView.getSelectionModel().select(previousIndex);
+					}
+					break;
+				default:
+					if (listView.getSelectionModel().getSelectedItem() == null) {
+						listView.getSelectionModel().selectFirst();
+					}
+				}
+			});
+			triggerActionWithSelectedItemButton.setDisable(listView.getSelectionModel().getSelectedItem() == null);
+			listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+				triggerActionWithSelectedItemButton.setDisable(newValue == null);
+			});
+			triggerActionWithSelectedItemButton.setText(Labels.getString("start-loadgame-go"));
+			triggerActionWithSelectedItemButton.setOnAction(event -> actionWithSelectedItemHandler.call());
+			selectFromListPane.setVisible(true);
+			listViewFilterField.requestFocus();
+		}
+		);
 
-			hideGoButtons();
-			loadGameGoButton.setVisible(true);
-		});
+		listView.getSelectionModel().
 
-		loadGameGoButton.setOnAction(e -> {
-			SavegameLoader savegameLoader = (SavegameLoader) listView.getSelectionModel().getSelectedItem();
-			if (savegameLoader != null) {
-				long randomSeed = 4711L;
-				byte playerId = 0;
-				PlayerSetting[] playerSettings = PlayerSetting.createDefaultSettings(playerId, (byte) savegameLoader.getMaxPlayers());
-				JSettlersGame game = new JSettlersGame(savegameLoader, randomSeed, playerId, playerSettings);
-				IStartingGame startingGame = game.start();
-				settlersApplication.showStartingGameMenu(startingGame);
-			}
-		});
+				setSelectionMode(SelectionMode.SINGLE);
 
 		setOriginalSettlersBackgroundImages();
+
 		resetUiState();
+
 	}
 
 	private void setOriginalSettlersBackgroundImages() {
@@ -121,12 +162,6 @@ public class MainMenuController extends SettlersApplicationController implements
 			if (buttonToDisable != null) {
 				UiUtils.setGuiBackground((ToggleButton) buttonToDisable, 3, 326);
 			}
-		});
-	}
-
-	private void hideGoButtons() {
-		Arrays.stream(goButtons).forEach(button -> {
-			button.setVisible(false);
 		});
 	}
 
