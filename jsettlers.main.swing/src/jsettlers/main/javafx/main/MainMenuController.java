@@ -20,20 +20,20 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.util.Callback;
 import jsettlers.graphics.localization.Labels;
+import jsettlers.graphics.startscreen.interfaces.IStartingGame;
 import jsettlers.logic.map.save.MapList;
 import jsettlers.logic.map.save.loader.RemakeMapLoader;
 import jsettlers.logic.map.save.loader.SavegameLoader;
+import jsettlers.logic.player.PlayerSetting;
+import jsettlers.main.JSettlersGame;
 import jsettlers.main.javafx.SettlersApplicationController;
 import jsettlers.main.javafx.UiUtils;
 
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author codingberlin
@@ -90,8 +90,34 @@ public class MainMenuController extends SettlersApplicationController implements
 			settlersApplication.showSettingsScene();
 		});
 
-		setOriginalSettlersBackgroundImages();
+		exitButton.setOnAction(e -> {
+			settlersApplication.close();
+		});
 
+		loadGameButton.setOnAction(e -> {
+			MapList mapList = MapList.getDefaultList();
+			listView.getItems().clear();
+			List<RemakeMapLoader> singlePlayerSaveGames = mapList.getSavedMaps().getItems();
+			listView.getItems().addAll(singlePlayerSaveGames);
+			listView.setCellFactory(savegameListViewCellFactory);
+			selectFromListPane.setVisible(true);
+			hideGoButtons();
+			loadGameGoButton.setVisible(true);
+		});
+
+		loadGameGoButton.setOnAction(e -> {
+			SavegameLoader savegameLoader = (SavegameLoader) listView.getSelectionModel().getSelectedItem();
+			if (savegameLoader != null) {
+				long randomSeed = 4711L;
+				byte playerId = 0;
+				PlayerSetting[] playerSettings = PlayerSetting.createDefaultSettings(playerId, (byte) savegameLoader.getMaxPlayers());
+				JSettlersGame game = new JSettlersGame(savegameLoader, randomSeed, playerId, playerSettings);
+				IStartingGame startingGame = game.start();
+				settlersApplication.showStartingGameMenu(startingGame);
+			}
+		});
+
+		setOriginalSettlersBackgroundImages();
 		resetUiState();
 	}
 
@@ -103,20 +129,6 @@ public class MainMenuController extends SettlersApplicationController implements
 			if (buttonToDisable != null) {
 				UiUtils.setGuiBackground((ToggleButton) buttonToDisable, 3, 326);
 			}
-		});
-
-		exitButton.setOnAction(e -> {
-			settlersApplication.close();
-		});
-
-		loadGameButton.setOnAction(e -> {
-			MapList mapList = MapList.getDefaultList();
-			List<RemakeMapLoader> singlePlayerSaveGames = mapList.getSavedMaps().getItems();
-			listView.getItems().addAll(singlePlayerSaveGames);
-			listView.setCellFactory(savegameListViewCellFactory);
-			selectFromListPane.setVisible(true);
-			hideGoButtons();
-			loadGameGoButton.setVisible(true);
 		});
 	}
 

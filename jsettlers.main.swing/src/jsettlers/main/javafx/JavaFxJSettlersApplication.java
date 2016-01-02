@@ -25,7 +25,9 @@ import javafx.stage.Stage;
 import jsettlers.common.utils.MainUtils;
 import jsettlers.common.utils.OptionableProperties;
 import jsettlers.graphics.localization.Labels;
+import jsettlers.graphics.startscreen.interfaces.IStartingGame;
 import jsettlers.main.SceneAndController;
+import jsettlers.main.javafx.startinggame.StartingGameController;
 import jsettlers.main.swing.SwingManagedJSettlers;
 
 /**
@@ -35,6 +37,7 @@ public class JavaFxJSettlersApplication extends Application {
 
 	private SceneAndController mainSceneAndController;
 	private SceneAndController settingsSceneAndController;
+	private SceneAndController startingGameSceneAndController;
 	private Stage stage;
 
 	private SceneAndController createScene(String fxmlUrl) throws IOException {
@@ -69,6 +72,11 @@ public class JavaFxJSettlersApplication extends Application {
 		resetControllerAndShowScene(settingsSceneAndController);
 	}
 
+
+	public void showStartingGameMenu(IStartingGame startingGame) {
+		((StartingGameController) startingGameSceneAndController.getController()).setStartingGame(startingGame);
+		resetControllerAndShowScene(startingGameSceneAndController);
+	}
 	private void resetControllerAndShowScene(SceneAndController sceneAndController) {
 		sceneAndController.getController().resetUiState();
 		stage.setScene(sceneAndController.getScene());
@@ -79,6 +87,7 @@ public class JavaFxJSettlersApplication extends Application {
 		stage = primaryStage;
 		mainSceneAndController = createScene("/jsettlers/main/javafx/main/mainMenu.fxml");
 		settingsSceneAndController = createScene("/jsettlers/main/javafx/settings/SettingsMenu.fxml");
+		startingGameSceneAndController = createScene("/jsettlers/main/javafx/startinggame/startingGame.fxml");
 		showMainScene();
 
 		stage.show();
