@@ -17,28 +17,44 @@ package jsettlers.main.javafx;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.PropertyResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import go.graphics.area.Area;
+import go.graphics.region.Region;
+import go.graphics.region.RegionContent;
+import go.graphics.sound.SoundPlayer;
+import go.graphics.swing.AreaContainer;
+import go.graphics.swing.sound.SwingSoundPlayer;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import jsettlers.common.utils.MainUtils;
 import jsettlers.common.utils.OptionableProperties;
 import jsettlers.graphics.localization.Labels;
+import jsettlers.graphics.startscreen.IContentSetable;
 import jsettlers.graphics.startscreen.interfaces.IStartingGame;
+import jsettlers.graphics.ui.UIPanel;
 import jsettlers.main.SceneAndController;
+import jsettlers.main.javafx.ingame.InGameController;
 import jsettlers.main.javafx.startinggame.StartingGameController;
 import jsettlers.main.swing.SwingManagedJSettlers;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * @author codingberlin
  */
-public class JavaFxJSettlersApplication extends Application {
+public class JavaFxJSettlersApplication extends Application implements IContentSetable {
 
 	private SceneAndController mainSceneAndController;
 	private SceneAndController settingsSceneAndController;
 	private SceneAndController startingGameSceneAndController;
+	private SceneAndController inGameSceneAndController;
 	private Stage stage;
+	private SoundPlayer soundPlayer = new SwingSoundPlayer();
 
 	private SceneAndController createScene(String fxmlUrl) throws IOException {
 		FXMLLoader fxmlLoader = createFxmlLoader();
@@ -88,6 +104,7 @@ public class JavaFxJSettlersApplication extends Application {
 		mainSceneAndController = createScene("/jsettlers/main/javafx/main/mainMenu.fxml");
 		settingsSceneAndController = createScene("/jsettlers/main/javafx/settings/SettingsMenu.fxml");
 		startingGameSceneAndController = createScene("/jsettlers/main/javafx/startinggame/startingGame.fxml");
+		inGameSceneAndController = createScene("/jsettlers/main/javafx/ingame/inGame.fxml");
 		showMainScene();
 
 		stage.show();
@@ -99,5 +116,43 @@ public class JavaFxJSettlersApplication extends Application {
 		SwingManagedJSettlers.setupResourceManagers(optionableProperties, "config.prp");
 
 		launch(args);
+	}
+
+	@Override public SoundPlayer getSoundPlayer() {
+		return soundPlayer;
+	}
+
+	@Override public void setContent(UIPanel panel) {
+		System.out.println("setContent UiPanel");
+		throw new NotImplementedException();
+	}
+
+	@Override public void setContent(RegionContent panel) {
+		System.out.println("setContent RegionContent");
+		Region region = new Region(500, 500);
+		region.setContent(panel);
+
+
+		Area area = new Area();
+		area.add(region);
+		((InGameController) inGameSceneAndController.getController()).setSwingNodeContent(new AreaContainer(area));
+
+		new Timer("opengl-redraw").schedule(new TimerTask() {
+			@Override
+			public void run() {
+				region.requestRedraw();
+			}
+		}, 100, 25);
+
+		Platform.runLater(() -> {
+			stage.setScene(inGameSceneAndController.getScene());
+
+		});
+	}
+
+
+	@Override public void goToStartScreen(String message) {
+		System.out.println("goToStartScreen");
+		throw new NotImplementedException();
 	}
 }

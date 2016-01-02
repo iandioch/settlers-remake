@@ -14,6 +14,9 @@
  *******************************************************************************/
 package jsettlers.main.javafx.startinggame;
 
+import go.graphics.region.RegionContent;
+import go.graphics.sound.SoundPlayer;
+import go.graphics.swing.sound.SwingSoundPlayer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,10 +24,17 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import jsettlers.graphics.localization.Labels;
 import jsettlers.graphics.map.IMapInterfaceConnector;
+import jsettlers.graphics.map.MapContent;
 import jsettlers.graphics.progress.EProgressState;
+import jsettlers.graphics.startscreen.IContentSetable;
 import jsettlers.graphics.startscreen.interfaces.*;
+import jsettlers.graphics.ui.UIPanel;
+import jsettlers.logic.map.MapLoader;
+import jsettlers.logic.player.PlayerSetting;
+import jsettlers.main.JSettlersGame;
 import jsettlers.main.javafx.SettlersApplicationController;
 import jsettlers.main.javafx.UiUtils;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -55,8 +65,10 @@ public class StartingGameController extends SettlersApplicationController implem
 	}
 
 	@Override public IMapInterfaceConnector preLoadFinished(IStartedGame game) {
+		MapContent content = new MapContent(game, settlersApplication.getSoundPlayer());
+		settlersApplication.setContent(content);
 		game.setGameExitListener(game1 -> settlersApplication.showMainScene());
-		return null;
+		return content.getInterfaceConnector();
 	}
 
 	@Override public void startFailed(EGameError errorType, Exception exception) {
