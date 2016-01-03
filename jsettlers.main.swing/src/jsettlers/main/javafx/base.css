@@ -4,8 +4,14 @@
 
 .button {
     -fx-text-fill: #FFDF00;
+    -fx-padding: 10;
 }
 
 .label {
+    -fx-text-fill: #FFDF00;
+    -fx-padding: 5;
+}
+
+.text-field {
     -fx-text-fill: #FFDF00;
 }

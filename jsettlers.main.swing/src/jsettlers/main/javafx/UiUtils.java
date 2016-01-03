@@ -43,6 +43,11 @@ public class UiUtils {
 
 	public static void setGuiBackground(Region region, int guiFile, int sequenceNumber) {
 		BufferedImage bufferedBackgroundImage = ImageProvider.getInstance().getGuiImage(guiFile, sequenceNumber).generateBufferedImage();
+		setBackgroundImage(region, bufferedBackgroundImage);
+
+	}
+
+	private static void setBackgroundImage(Region region, BufferedImage bufferedBackgroundImage) {
 		WritableImage fxImage = new WritableImage(bufferedBackgroundImage.getWidth(), bufferedBackgroundImage.getHeight());
 		SwingFXUtils.toFXImage(bufferedBackgroundImage, fxImage);
 
@@ -54,7 +59,16 @@ public class UiUtils {
 								BackgroundRepeat.NO_REPEAT,
 								BackgroundPosition.DEFAULT,
 								new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, false, true))));
+	}
 
+	public static void setTextFieldBackground(Region region) {
+		BufferedImage bufferedBackgroundImage = ImageProvider.getInstance().getGuiImage(2, 10).generateBufferedImage();
+		setBackgroundImage(region, bufferedBackgroundImage.getSubimage(2, 35, 208, 27));
+	}
+
+	public static void setLabelBackground(Region region) {
+		BufferedImage bufferedBackgroundImage = ImageProvider.getInstance().getGuiImage(2, 10).generateBufferedImage();
+		setBackgroundImage(region, bufferedBackgroundImage.getSubimage(3, 3, 153, 27));
 	}
 
 	public static void registerMousePressedBackgroundChange(Region button) {

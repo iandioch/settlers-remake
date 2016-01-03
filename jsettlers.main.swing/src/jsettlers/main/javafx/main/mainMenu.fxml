@@ -61,7 +61,7 @@
             <top>
                 <VBox BorderPane.alignment="CENTER">
                     <children>
-                        <Label text="%start-filter"/>
+                        <Label fx:id="listViewFilterLabel" text="%start-filter"/>
                         <TextField fx:id="listViewFilterField"/>
                     </children>
                 </VBox>

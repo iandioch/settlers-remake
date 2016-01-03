@@ -57,6 +57,7 @@ public class MainMenuController extends SettlersApplicationController implements
 	@FXML private BorderPane selectFromListPane;
 	@FXML private ListView<MapLoader> listView;
 	@FXML private TextField listViewFilterField;
+	@FXML private Label listViewFilterLabel;
 
 
 	/*
@@ -177,6 +178,8 @@ public class MainMenuController extends SettlersApplicationController implements
 
 	private void setOriginalSettlersBackgroundImages() {
 		UiUtils.setGuiBackground(startMenuPane, 2, 29);
+		UiUtils.setTextFieldBackground(listViewFilterField);
+		UiUtils.setLabelBackground(listViewFilterLabel);
 		Arrays.stream(allButtons).forEach(UiUtils::registerMousePressedBackgroundChange);
 
 		startMenuToggleButtons.selectedToggleProperty().addListener((observableValue, buttonToDisable, buttonToEnable) -> {
