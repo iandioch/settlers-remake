@@ -15,6 +15,7 @@
 package jsettlers.main.javafx;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.PropertyResourceBundle;
 import java.util.Timer;
@@ -58,7 +59,7 @@ public class JavaFxJSettlersApplication extends Application implements IContentS
 
 	private SceneAndController createScene(String fxmlUrl) throws IOException {
 		FXMLLoader fxmlLoader = createFxmlLoader();
-		Scene scene = new Scene(fxmlLoader.load(getClass().getResource(fxmlUrl).openStream()));
+		Scene scene = new Scene(fxmlLoader.load(JavaFxJSettlersApplication.class.getResourceAsStream(fxmlUrl)));
 		scene.getStylesheets().add("/jsettlers/main/javafx/base.css");
 
 		SettlersApplicationController controller = fxmlLoader.<SettlersApplicationController>getController();
@@ -107,10 +108,10 @@ public class JavaFxJSettlersApplication extends Application implements IContentS
 		});
 
 		stage = primaryStage;
-		mainSceneAndController = createScene("/jsettlers/main/javafx/main/mainMenu.fxml");
-		settingsSceneAndController = createScene("/jsettlers/main/javafx/settings/SettingsMenu.fxml");
-		startingGameSceneAndController = createScene("/jsettlers/main/javafx/startinggame/startingGame.fxml");
-		inGameSceneAndController = createScene("/jsettlers/main/javafx/ingame/inGame.fxml");
+		mainSceneAndController = createScene("main/mainMenu.fxml");
+		settingsSceneAndController = createScene("settings/settingsMenu.fxml");
+		startingGameSceneAndController = createScene("startinggame/startingGame.fxml");
+		inGameSceneAndController = createScene("ingame/ingame.fxml");
 		showMainScene();
 
 		stage.show();
