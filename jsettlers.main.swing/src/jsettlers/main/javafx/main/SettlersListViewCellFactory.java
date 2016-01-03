@@ -17,22 +17,28 @@ package jsettlers.main.javafx.main;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
-import jsettlers.graphics.localization.Labels;
 import jsettlers.logic.map.MapLoader;
 import jsettlers.logic.map.save.loader.RemakeMapLoader;
-
-import java.text.DateFormat;
 
 /**
  * @author codingberlin
  */
-public class SaveGameListViewCellFactory extends SettlersListViewCellFactory {
-
-	@Override public String getLabelOf(MapLoader mapLoader) {
-		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Labels.preferredLocale);
-		String formattedDate = dateFormat.format(mapLoader.getCreationDate());
-		String[] values = { formattedDate, mapLoader.getMapName() };
-		return String.format("%s (%s)", values);
+public abstract class SettlersListViewCellFactory implements Callback<ListView<MapLoader>, ListCell<MapLoader>> {
+	@Override
+	public ListCell<MapLoader> call(ListView<MapLoader> listView) {
+		return new ListCell<MapLoader>() {
+			@Override
+			protected void updateItem(MapLoader map, boolean isEmpty) {
+				super.updateItem(map, isEmpty);
+				if (map != null && !isEmpty) {
+					setText(getLabelOf(map));
+				} else {
+					setGraphic(null);
+					setText(null);
+				}
+			}
+		};
 	}
 
+	public abstract String getLabelOf(MapLoader mapLoader);
 }

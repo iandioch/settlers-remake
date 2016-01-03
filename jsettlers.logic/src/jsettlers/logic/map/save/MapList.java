@@ -70,7 +70,7 @@ public class MapList implements IMapListerCallable {
 	private final IMapLister originalMapsDirectory;
 
 	private final ChangingList<MapLoader> freshMaps = new ChangingList<>();
-	private final ChangingList<RemakeMapLoader> savedMaps = new ChangingList<>();
+	private final ChangingList<MapLoader> savedMaps = new ChangingList<>();
 
 	private boolean fileListLoaded = false;
 
@@ -118,7 +118,7 @@ public class MapList implements IMapListerCallable {
 		}
 	}
 
-	public synchronized ChangingList<RemakeMapLoader> getSavedMaps() {
+	public synchronized ChangingList<MapLoader> getSavedMaps() {
 		if (!fileListLoaded) {
 			loadFileList();
 			fileListLoaded = true;
