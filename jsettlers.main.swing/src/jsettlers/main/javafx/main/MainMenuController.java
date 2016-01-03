@@ -14,6 +14,7 @@
  *******************************************************************************/
 package jsettlers.main.javafx.main;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
@@ -60,7 +61,6 @@ public class MainMenuController extends SettlersApplicationController implements
 
 	/*
 	%start-joinmultiplayer-go
-	%start-newmultiplayer-go
 	 */
 
 	private ButtonBase[] allButtons;
@@ -97,6 +97,19 @@ public class MainMenuController extends SettlersApplicationController implements
 		newGameButton.setOnAction(e -> {
 			initializeSelectFromListPane(
 					"newgame-go",
+					mapListViewCellFactory,
+					MapList.getDefaultList().getFreshMaps().getItems(),
+					() -> {
+						MapLoader mapLoader = listView.getSelectionModel().getSelectedItem();
+						if (mapLoader != null) {
+							throw new NotImplementedException();
+						}
+					});
+		});
+
+		newMultiPlayerButton.setOnAction(e -> {
+			initializeSelectFromListPane(
+					"start-newmultiplayer-go",
 					mapListViewCellFactory,
 					MapList.getDefaultList().getFreshMaps().getItems(),
 					() -> {

@@ -28,7 +28,6 @@ import go.graphics.swing.AreaContainer;
 import go.graphics.swing.sound.SwingSoundPlayer;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -38,6 +37,7 @@ import jsettlers.graphics.localization.Labels;
 import jsettlers.graphics.startscreen.IContentSetable;
 import jsettlers.graphics.startscreen.interfaces.IStartingGame;
 import jsettlers.graphics.ui.UIPanel;
+import jsettlers.logic.map.save.MapList;
 import jsettlers.main.SceneAndController;
 import jsettlers.main.javafx.ingame.InGameController;
 import jsettlers.main.javafx.startinggame.StartingGameController;
@@ -78,6 +78,7 @@ public class JavaFxJSettlersApplication extends Application implements IContentS
 
 	public void close() {
 		stage.close();
+		Platform.exit();
 	}
 
 	public void showMainScene() {
@@ -100,6 +101,11 @@ public class JavaFxJSettlersApplication extends Application implements IContentS
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		// invoke to shorten loading time later
+		Platform.runLater(() -> {
+			MapList.getDefaultList().getFreshMaps();
+		});
+
 		stage = primaryStage;
 		mainSceneAndController = createScene("/jsettlers/main/javafx/main/mainMenu.fxml");
 		settingsSceneAndController = createScene("/jsettlers/main/javafx/settings/SettingsMenu.fxml");
@@ -112,9 +118,7 @@ public class JavaFxJSettlersApplication extends Application implements IContentS
 
 	public static void main(String args[]) throws IOException {
 		OptionableProperties optionableProperties = MainUtils.loadOptions(args);
-
 		SwingManagedJSettlers.setupResourceManagers(optionableProperties, "config.prp");
-
 		launch(args);
 	}
 
@@ -146,7 +150,6 @@ public class JavaFxJSettlersApplication extends Application implements IContentS
 
 		Platform.runLater(() -> {
 			stage.setScene(inGameSceneAndController.getScene());
-
 		});
 	}
 
