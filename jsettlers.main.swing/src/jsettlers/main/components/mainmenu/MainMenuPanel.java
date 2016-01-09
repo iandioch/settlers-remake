@@ -18,6 +18,8 @@ import jsettlers.graphics.localization.Labels;
 import jsettlers.logic.map.MapLoader;
 import jsettlers.logic.map.save.MapList;
 import jsettlers.logic.map.save.loader.RemakeMapLoader;
+import jsettlers.lookandfeel.LFStyle;
+import jsettlers.lookandfeel.components.SplitedBackgroundPanel;
 import jsettlers.main.components.openpanel.OpenPanel;
 import jsettlers.main.swing.SettlersFrame;
 
@@ -29,7 +31,7 @@ import java.util.Vector;
 /**
  * @author codingberlin
  */
-public class MainMenuPanel extends JPanel {
+public class MainMenuPanel extends SplitedBackgroundPanel {
 
 	public static final Dimension PREFERRED_EAST_SIZE = new Dimension(300, 300);
 	private final SettlersFrame settlersFrame;
@@ -51,6 +53,7 @@ public class MainMenuPanel extends JPanel {
 		startSaveGame.setRelatedOpenPanel(openSaveGamePanel);
 		createStructure();
 		localize();
+		setStyle();
 		addListener();
 	}
 
@@ -58,6 +61,15 @@ public class MainMenuPanel extends JPanel {
 		List<MapLoader> mapLoaders = new Vector<MapLoader>();
 		mapLoaders.addAll(remakeMapLoaders);
 		return mapLoaders;
+	}
+
+	private void setStyle() {
+		newSinglePlayerGameButton.putClientProperty(LFStyle.KEY, LFStyle.BUTTON_MENU);
+		loadSaveGameButton.putClientProperty(LFStyle.KEY, LFStyle.BUTTON_MENU);
+		settingsButton.putClientProperty(LFStyle.KEY, LFStyle.BUTTON_MENU);
+		exitButton.putClientProperty(LFStyle.KEY, LFStyle.BUTTON_MENU);
+		SwingUtilities.updateComponentTreeUI(this);
+		invalidate();
 	}
 
 	private void addListener() {
@@ -82,17 +94,17 @@ public class MainMenuPanel extends JPanel {
 		westPanel.add(loadSaveGameButton);
 		westPanel.add(settingsButton);
 		westPanel.add(exitButton);
-		add(westPanel, BorderLayout.WEST);
+		add(westPanel);
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(newSinglePlayerGameButton);
 		buttonGroup.add(loadSaveGameButton);
-		add(emptyPanel, BorderLayout.CENTER);
+		add(emptyPanel);
 		westPanel.setPreferredSize(PREFERRED_EAST_SIZE);
 	}
 
 	private void setCenter(final OpenPanel panelToBeSet) {
 		remove(1);
-		add(panelToBeSet, BorderLayout.CENTER);
+		add(panelToBeSet);
 		settlersFrame.revalidate();
 		settlersFrame.repaint();
 	}
