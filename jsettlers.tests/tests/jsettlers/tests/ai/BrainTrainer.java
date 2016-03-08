@@ -34,6 +34,8 @@ import jsettlers.network.client.OfflineNetworkConnector;
 import jsettlers.tests.utils.MapUtils;
 import org.junit.Test;
 
+import java.util.*;
+
 import static org.junit.Assert.fail;
 
 /**
@@ -52,8 +54,33 @@ public class BrainTrainer {
 	public void trainBrain() {
 		BuildingIndividual individual = new BuildingIndividual();
 		//individual.generateRandomWeights();
-		individual.setRNA("2|1|2|0|4|-2|-3|0|4|3|-1|-3|0|-4|3|-1|0|-2|0|-1|2|-4|3|-1|-4|-1|2|1|2|-2|0|1|4|-4|0|1|3|-3|4|4|1|1|-4|0|2|-2|0|-3|0|3|-1"
-				+ "|0|0|3|-1|-1");
+		List<TrainingResult> population = new ArrayList<TrainingResult>();
+
+		for (int i = 0; i < 10; i++) {
+			individual.generateRandomWeights();
+			int score = playGameAndGetScore(individual);
+			population.add(new TrainingResult(1, score, individual.toString()));
+		}
+
+		for (int i = 0; i < population.size(); i++) {
+			int max = i;
+			for (int ii = i+1; ii < population.size(); ii++) {
+				if (population.get(ii).getScore() > population.get(max).getScore()) {
+					max = ii;
+				}
+			}
+			TrainingResult copy = population.get(i);
+			population.set(i, population.get(max));
+			population.set(max, copy);
+		}
+
+		for (TrainingResult trainingResult : population) {
+			System.out.println(trainingResult);
+		}
+
+	}
+
+	private int playGameAndGetScore(BuildingIndividual individual) {
 		PlayerSetting[] playerSettings = new PlayerSetting[4];
 		playerSettings[0] = new PlayerSetting(true, EPlayerType.AI_VERY_HARD, ECivilisation.ROMAN, (byte) 0, individual);
 		playerSettings[1] = new PlayerSetting(false, (byte) -1);
@@ -68,9 +95,8 @@ public class BrainTrainer {
 		score += calculateScore(aiStatistics);
 		MatchConstants.clock().fastForwardTo(20 * MINUTES);
 		score += calculateScore(aiStatistics);
-		System.out.println("Score " + score + " --> " + individual);
-
 		ReplayUtils.awaitShutdown(startedGame);
+		return score;
 	}
 
 	private int calculateScore(AiStatistics aiStatistics) {
@@ -84,4 +110,26 @@ public class BrainTrainer {
 		return (JSettlersGame.GameRunner) game.start();
 	}
 
+
+	public class TrainingResult {
+
+		private int generation;
+		private int score;
+		private String rna;
+
+		public TrainingResult(int generation, int score, String rna) {
+			this.generation = generation;
+			this.score = score;
+			this.rna = rna;
+		}
+
+		public int getScore() {
+			return score;
+		}
+
+		@Override public String toString() {
+			return generation + ". Generation mit Score " + score + ": " + rna;
+		}
+
+	}
 }
