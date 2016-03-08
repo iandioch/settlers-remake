@@ -4,9 +4,7 @@ import jsettlers.ai.highlevel.AiStatistics;
 import jsettlers.common.buildings.EBuildingType;
 import jsettlers.common.material.EMaterialType;
 
-import java.util.List;
-import java.util.Random;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * @author codingberlin
@@ -92,4 +90,14 @@ public class BuildingIndividual {
 		return result.substring(0, result.length()-1);
 	}
 
+	public void setRNA(String rna) {
+		Iterator<String> weights = Arrays.asList(rna.split("\\|")).iterator();
+		for (WeightedInputsNeuron neuron : calculatingNeurons) {
+			List<Integer> oldWeights = neuron.getWeights();
+			for (int i = 0; i < oldWeights.size(); i++) {
+				oldWeights.set(i, Integer.parseInt(weights.next()));
+			}
+			neuron.setWeights(oldWeights);
+		}
+	}
 }

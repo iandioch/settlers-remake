@@ -51,7 +51,9 @@ public class BrainTrainer {
 	@Test
 	public void trainBrain() {
 		BuildingIndividual individual = new BuildingIndividual();
-		individual.generateRandomWeights();
+		//individual.generateRandomWeights();
+		individual.setRNA("2|1|2|0|4|-2|-3|0|4|3|-1|-3|0|-4|3|-1|0|-2|0|-1|2|-4|3|-1|-4|-1|2|1|2|-2|0|1|4|-4|0|1|3|-3|4|4|1|1|-4|0|2|-2|0|-3|0|3|-1"
+				+ "|0|0|3|-1|-1");
 		PlayerSetting[] playerSettings = new PlayerSetting[4];
 		playerSettings[0] = new PlayerSetting(true, EPlayerType.AI_VERY_HARD, ECivilisation.ROMAN, (byte) 0, individual);
 		playerSettings[1] = new PlayerSetting(false, (byte) -1);
