@@ -21,6 +21,7 @@ import jsettlers.ai.economy.AdaptableEconomyMinister;
 import jsettlers.ai.economy.EconomyMinister;
 import jsettlers.ai.economy.MiddleEconomyMinister;
 import jsettlers.ai.economy.WinnerEconomyMinister;
+import jsettlers.ai.neurons.BuildingIndividual;
 import jsettlers.common.ai.EPlayerType;
 import jsettlers.common.player.ECivilisation;
 import jsettlers.logic.map.grid.MainGrid;
@@ -39,6 +40,11 @@ public class WhatToDoAiFactory {
 					taskScheduler) {
 		ArmyGeneral general = determineArmyGeneral(type, civilisation, aiStatistics, player, movableGrid, taskScheduler);
 		EconomyMinister minister = determineMinister(type, civilisation, aiStatistics, player);
+		if (type == EPlayerType.AI_VERY_EASY) {
+			BuildingIndividual individual = new BuildingIndividual();
+			individual.generateRandomWeights();
+			return new BrainWhatToDoAi(player.playerId, aiStatistics, minister, general, mainGrid, taskScheduler, individual);
+		}
 		return new WhatToDoAi(player.playerId, aiStatistics, minister, general, mainGrid, taskScheduler);
 	}
 
