@@ -2,6 +2,7 @@ package jsettlers.logic.player;
 
 import java.util.Arrays;
 
+import jsettlers.ai.neurons.BuildingIndividual;
 import jsettlers.common.CommonConstants;
 import jsettlers.common.ai.EPlayerType;
 import jsettlers.common.player.ECivilisation;
@@ -14,6 +15,7 @@ public class PlayerSetting {
 	private final EPlayerType playerType;
 	private final ECivilisation civilisation;
 	private final byte teamId;
+	private BuildingIndividual individual;
 	private boolean isAvailable;
 
 	/**
@@ -33,10 +35,19 @@ public class PlayerSetting {
 	 *            {@link EPlayerType} defining the type of the AI player. If <code>null</code>, a human player is assumed.
 	 */
 	public PlayerSetting(boolean isAvailable, EPlayerType playerType, ECivilisation civilisation, byte teamId) {
+		this(isAvailable, playerType, civilisation, teamId, null);
+	}
+
+	public PlayerSetting(boolean isAvailable, EPlayerType playerType, ECivilisation civilisation, byte teamId, BuildingIndividual individual) {
 		this.isAvailable = isAvailable;
 		this.playerType = playerType;
 		this.civilisation = civilisation;
 		this.teamId = teamId;
+		this.individual = individual;
+	}
+
+	public BuildingIndividual getIndividual() {
+		return individual;
 	}
 
 	public boolean isAvailable() {

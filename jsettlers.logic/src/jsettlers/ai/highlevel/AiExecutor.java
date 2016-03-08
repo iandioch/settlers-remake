@@ -17,6 +17,8 @@ package jsettlers.ai.highlevel;
 import java.util.ArrayList;
 import java.util.List;
 
+import jsettlers.ai.army.LooserGeneral;
+import jsettlers.ai.economy.AdaptableEconomyMinister;
 import jsettlers.common.logging.StatisticsStopWatch;
 import jsettlers.logic.map.grid.MainGrid;
 import jsettlers.logic.player.PlayerSetting;
@@ -42,14 +44,21 @@ public class AiExecutor implements INetworkTimerable {
 		for (byte playerId = 0; playerId < playerSettings.length; playerId++) {
 			PlayerSetting playerSetting = playerSettings[playerId];
 			if (playerSetting.isAvailable() && playerSetting.getPlayerType().isAi()) {
-				whatToDoAis.add(aiFactory.buildWhatToDoAi(
-						playerSettings[playerId].getPlayerType(),
-						playerSettings[playerId].getCivilisation(),
-						aiStatistics,
-						mainGrid.getPartitionsGrid().getPlayer(playerId),
-						mainGrid,
-						mainGrid.getMovableGrid(),
-						taskScheduler));
+				if (playerSetting.getIndividual() != null) {
+					whatToDoAis.add(new BrainWhatToDoAi(playerId, aiStatistics, new AdaptableEconomyMinister(aiStatistics, mainGrid
+							.getPartitionsGrid().getPlayer(playerId)), new LooserGeneral(aiStatistics, mainGrid
+							.getPartitionsGrid().getPlayer(playerId), mainGrid.getMovableGrid(), taskScheduler),
+							mainGrid, taskScheduler, playerSetting.getIndividual()));
+				} else {
+					whatToDoAis.add(aiFactory.buildWhatToDoAi(
+							playerSettings[playerId].getPlayerType(),
+							playerSettings[playerId].getCivilisation(),
+							aiStatistics,
+							mainGrid.getPartitionsGrid().getPlayer(playerId),
+							mainGrid,
+							mainGrid.getMovableGrid(),
+							taskScheduler));
+				}
 			}
 		}
 	}
